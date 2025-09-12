@@ -48,11 +48,17 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+          $message = [
+            'required' => 'Belum diisi, harap isi terlebih dahulu',
+            'unique'   => 'Sudah ada, gunakan yang lain',
+        ];
+
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+            'name'      => ['required', 'string', 'max:255'],
+            'email'     => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password'  => ['required', 'string', 'min:5'],
+            'tipe_user' => ['nullable', 'in:pns,p3k,magang,cleaning'],
+        ], $message);
     }
 
     /**
@@ -64,9 +70,11 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'name'      => $data['name'],
+            'email'     => $data['email'],
+            'password' => bcrypt($data['password']),
+            'role'      => 'user', // default selalu user
+            'tipe_user' => $data['tipe_user'] ?? null, // boleh kosong
         ]);
     }
 }

@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->date('tanggal');
-            $table->text('kegiatan');
+            $table->enum('kegiatan',['WFO', 'WFH']);
             $table->text('catatan_pekerjaan')->nullable();
             $table->time('jam_masuk');
             $table->time('jam_pulang');
-            $table->enum('status', ['WFO', 'WFH']);
+            $table->enum('status', ['Belum', 'selesai'])->default('Belum');
             $table->timestamps();
         });
     }
