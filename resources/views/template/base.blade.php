@@ -129,66 +129,70 @@
                         <div id="totalRevenueChart" class="px-3"></div>
                       </div>
                       <div class="col-lg-4">
-                        <div class="card-body px-xl-9 py-12 d-flex align-items-center flex-column">
-                          <div class="text-center mb-6">
-                            <div class="btn-group">
-                              <button type="button" class="btn btn-outline-primary">
-                                <script>
-                                  document.write(new Date().getFullYear() - 1);
-                                </script>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <span class="visually-hidden">Toggle Dropdown</span>
-                              </button>
-                              <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="javascript:void(0);">2021</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);">2020</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);">2019</a></li>
-                              </ul>
-                            </div>
-                          </div>
+  <div class="card-body px-xl-9 py-12 d-flex align-items-center flex-column">
+    
+    {{-- Dropdown Tahun + Tombol Presensi --}}
+    <div class="text-center mb-6">
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#modalPresensi">
+          <i class="bx bx-bell"></i> Presensi
+        </button>
+      </div>
+    </div>
+    
+    {{-- Info tambahan --}}
+    <div class="d-flex gap-11 justify-content-between">
+      <div class="d-flex">
+        <div class="avatar me-2">
+          <span class="avatar-initial rounded-2 bg-label-primary">
+            <i class="icon-base bx bx-dollar icon-lg text-primary"></i>
+          </span>
+        </div>
+        <div class="d-flex flex-column">
+          <small><script>document.write(new Date().getFullYear() - 1);</script></small>
+          <h6 class="mb-0">$32.5k</h6>
+        </div>
+      </div>
+      <div class="d-flex">
+        <div class="avatar me-2">
+          <span class="avatar-initial rounded-2 bg-label-info">
+            <i class="icon-base bx bx-wallet icon-lg text-info"></i>
+          </span>
+        </div>
+        <div class="d-flex flex-column">
+          <small><script>document.write(new Date().getFullYear() - 2);</script></small>
+          <h6 class="mb-0">$41.2k</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-                          <div id="growthChart"></div>
-                          <div class="text-center fw-medium my-6">62% Company Growth</div>
+{{-- MODAL PRESENSI --}}
+<div class="modal fade" id="modalPresensi" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ route('presensi.store') }}">
+      @csrf
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Presensi Masuk</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <select name="kegiatan" class="form-control" required>
+            <option value="">-- Pilih --</option>
+            <option value="WFO">WFO</option>
+            <option value="WFH">WFH</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Rekam Jam Masuk</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
-                          <div class="d-flex gap-11 justify-content-between">
-                            <div class="d-flex">
-                              <div class="avatar me-2">
-                                <span class="avatar-initial rounded-2 bg-label-primary"
-                                  ><i class="icon-base bx bx-dollar icon-lg text-primary"></i
-                                ></span>
-                              </div>
-                              <div class="d-flex flex-column">
-                                <small>
-                                  <script>
-                                    document.write(new Date().getFullYear() - 1);
-                                  </script>
-                                </small>
-                                <h6 class="mb-0">$32.5k</h6>
-                              </div>
-                            </div>
-                            <div class="d-flex">
-                              <div class="avatar me-2">
-                                <span class="avatar-initial rounded-2 bg-label-info"
-                                  ><i class="icon-base bx bx-wallet icon-lg text-info"></i
-                                ></span>
-                              </div>
-                              <div class="d-flex flex-column">
-                                <small>
-                                  <script>
-                                    document.write(new Date().getFullYear() - 2);
-                                  </script>
-                                </small>
-                                <h6 class="mb-0">$41.2k</h6>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->date('tanggal');
             $table->enum('kegiatan',['WFO', 'WFH']);
             $table->text('catatan_pekerjaan')->nullable();
-            $table->time('jam_masuk');
-            $table->time('jam_pulang');
+            $table->time('jam_masuk')->nullable();
+            $table->time('jam_pulang')->nullable();
             $table->enum('status', ['Belum', 'selesai'])->default('Belum');
             $table->timestamps();
         });

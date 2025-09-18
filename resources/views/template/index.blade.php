@@ -40,6 +40,7 @@
     <!-- endbuild -->
 
     <link rel="stylesheet" href="{{ asset('template/vendor/libs/apex-charts/apex-charts.css') }}" />
+    
 
     <!-- Page CSS -->
 

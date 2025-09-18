@@ -33,7 +33,7 @@ class LoginController extends Controller
         }
 
         if (Auth::user()->role == 'user') {
-            return '/home'; // default user biasa
+            return '/user/home'; // default user biasa
         }
 
         return '/login'; // fallback kalau tidak ada role
