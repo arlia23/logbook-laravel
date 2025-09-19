@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BaseController;
 use App\Http\Controllers\Admin\CutiController;
 use App\Http\Controllers\Admin\DinasLuarController;
 use App\Http\Controllers\Admin\LogbookController;
+use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\PresensiController;
 use App\Http\Controllers\Admin\RekapKehadiranController;
 use App\Http\Controllers\Admin\SakitController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\User\UserCutiController;
 use App\Http\Controllers\User\UserDinasLuarController;
 use App\Http\Controllers\User\UserPresensiController;
 use App\Http\Controllers\User\UserLogbookController;
+use App\Http\Controllers\User\UserMonitoringController;
 use App\Http\Controllers\User\UserSakitController;
 
 
@@ -57,7 +59,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
         Route::get('/{id}', 'show')->name('show');
         Route::post('/generate', 'generate')->name('generate');
     });
-     Route::controller(DinasLuarController::class)->group(function () {
+    Route::controller(DinasLuarController::class)->group(function () {
         Route::get('/dinas-luar', 'index')->name('admin.dinas.index');
         Route::get('/dinas-luar/{id}', 'show')->name('admin.dinas.show');
         Route::put('/dinas-luar/{id}/approve', 'approve')->name('admin.dinas.approve');
@@ -81,6 +83,11 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
         Route::put('/cuti/{id}/approve', 'approve')->name('admin.cuti.approve');
         Route::put('/cuti/{id}/reject', 'reject')->name('admin.cuti.reject');
         Route::delete('/cuti/{id}', 'destroy')->name('admin.cuti.destroy');
+    });
+    Route::controller(MonitoringController::class)->group(function () {
+        Route::get('/monitoring', 'index')->name('admin.monitoring.index');
+        Route::post('/monitoring/store', 'store')->name('admin.monitoring.store');
+        Route::put('/monitoring/update', 'update')->name('admin.monitoring.update');
     });
 });
 
@@ -113,16 +120,15 @@ Route::prefix('user')->middleware(['auth', 'isUser'])->group(function () {
         return view('user.help');
     })->name('user.help');
 
-        // 📍 DINAS LUAR
+    // 📍 DINAS LUAR
     Route::controller(UserDinasLuarController::class)->group(function () {
         Route::get('/dinas-luar', 'index')->name('user.dinas.index');
         Route::get('/dinas-luar/create', 'create')->name('user.dinas.create');
         Route::post('/dinas-luar', 'store')->name('user.dinas.store');
         Route::get('/dinas-luar/{id}', 'show')->name('user.dinas.show');
         Route::put('/dinas-luar/{dinasLuar}', 'update')->name('user.dinas.update');
-Route::get('/dinas-luar/{dinasLuar}/edit', 'edit')->name('user.dinas.edit');
-Route::delete('/dinas-luar/{dinasLuar}', 'destroy')->name('user.dinas.destroy');
-
+        Route::get('/dinas-luar/{dinasLuar}/edit', 'edit')->name('user.dinas.edit');
+        Route::delete('/dinas-luar/{dinasLuar}', 'destroy')->name('user.dinas.destroy');
     });
 
     // 🤒 SAKIT
@@ -143,9 +149,10 @@ Route::delete('/dinas-luar/{dinasLuar}', 'destroy')->name('user.dinas.destroy');
         Route::post('/cuti', 'store')->name('user.cuti.store');
         Route::get('/cuti/{id}', 'show')->name('user.cuti.show');
         Route::get('/cuti/{cuti}/edit', [UserCutiController::class, 'edit'])->name('user.cuti.edit');
-Route::put('/cuti/{cuti}', [UserCutiController::class, 'update'])->name('user.cuti.update');
-Route::delete('/cuti/{cuti}', [UserCutiController::class, 'destroy'])->name('user.cuti.destroy');
-
+        Route::put('/cuti/{cuti}', [UserCutiController::class, 'update'])->name('user.cuti.update');
+        Route::delete('/cuti/{cuti}', [UserCutiController::class, 'destroy'])->name('user.cuti.destroy');
     });
-
+    Route::controller(UserMonitoringController::class)->group(function () {
+        Route::get('/monitoring', 'index')->name('user.monitoring.index');
+    });
 });

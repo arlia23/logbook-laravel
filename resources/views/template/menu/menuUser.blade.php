@@ -50,10 +50,11 @@
         </a>
         <ul class="menu-sub">
             <li class="menu-item">
-                <a href="#" class="menu-link">
-                    <div class="text-truncate">Monitoring</div>
+                <a href="{{ route('user.monitoring.index') }}" class="menu-link">
+                    <div class="text-truncate" data-i18n="Catatan">Catatan Supervisor</div>
                 </a>
             </li>
+
             <li class="menu-item">
                 <a href="#" class="menu-link">
                     <div>Kehadiran</div>

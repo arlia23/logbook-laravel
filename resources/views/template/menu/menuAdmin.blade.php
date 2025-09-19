@@ -48,8 +48,8 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="{{ route('admin.tidak_hadir.index') }}" class="menu-link">
-                    <div class="text-truncate" data-i18n="Basic">Tidak Hadir</div>
+                <a href="{{ route('admin.monitoring.index') }}" class="menu-link">
+                    <div class="text-truncate" data-i18n="Basic">Monitor</div>
                 </a>
             </li>
             <li class="menu-item">
