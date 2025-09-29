@@ -1,44 +1,120 @@
 @extends('template.index')
 
 @section('main')
-<div class="container">
-    <h1>Edit Profil</h1>
+    <div class="container-xxl flex-grow-1 container-p-y">
 
-    <form action="{{ route('user.profile.update') }}" method="POST">
-        @csrf
-        @method('PUT')
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Edit Profil</h5>
+            </div>
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Nama</label>
-            <input type="text" name="name" id="name"
-                class="form-control @error('name') is-invalid @enderror"
-                value="{{ old('name', $user->name) }}" required>
-            @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            <div class="card-body">
+                <form action="{{ route('user.profile.update') }}" method="POST" class="mx-auto" style="max-width: 600px;">
+                    @csrf
+                    @method('PUT')
+
+                    {{-- Nama --}}
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-bold">Nama</label>
+                        <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}"
+                            required>
+                        @error('name')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    {{-- Email --}}
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-bold">Email</label>
+                        <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}"
+                            required>
+                        @error('email')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    {{-- NIP --}}
+                    <div class="mb-3">
+                        <label for="nip" class="form-label fw-bold">NIP</label>
+                        <input type="text" name="nip" class="form-control" value="{{ old('nip', $user->nip) }}">
+                    </div>
+
+                    {{-- Unit / Fakultas --}}
+                    <div class="mb-3">
+                        <label for="unit_fakultas" class="form-label fw-bold">Unit / Fakultas</label>
+                        <select name="unit_fakultas" class="form-select">
+                            <option value="">-- Pilih Unit / Fakultas --</option>
+                            @foreach (['BIRO AKADEMIS KEMAHASISWAAN', 'BIRO PERENCANAAN DAN HUBUNGAN MASYARAKAT', 'BIRO UMUM KEUANGAN', 'Fakultas Ekonomi dan Bisnis', 'Fakultas Hukum', 'Fakultas Ilmu Sosial dan Ilmu Politik', 'Fakultas Kedokteran', 'Fakultas Keguruan dan Ilmu Pendidikan', 'Fakultas Keperawatan', 'Fakultas Matematika dan Ilmu Pengetahuan Alam', 'Fakultas Perikanan dan Kelautan', 'Fakultas Pertanian', 'Fakultas Teknik', 'KANTOR URUSAN INTERNASIONAL', 'LPPM', 'LPPMP', 'P2K2', 'PASCASARJANA', 'Rektorat', 'RSP', 'Satuan Pengawas Internal', 'Security', 'UPA Bahasa', 'UPA Bimbingan Konseling', 'UPA Laboratorium Terpadu', 'UPA Layanan Uji Kompetensi', 'UPA Pengembangan Karir dan Kewirausahaan', 'UPA Percetakan dan Penerbitan', 'UPA Perpustakaan', 'UPA Teknologi Informasi dan Komunikasi'] as $unit)
+                                <option value="{{ $unit }}"
+                                    {{ old('unit_fakultas', $user->unit_fakultas) == $unit ? 'selected' : '' }}>
+                                    {{ $unit }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Jabatan --}}
+                    <div class="mb-3">
+                        <label for="jabatan" class="form-label fw-bold">Jabatan</label>
+                        <input type="text" name="jabatan" class="form-control"
+                            value="{{ old('jabatan', $user->jabatan) }}">
+                    </div>
+
+                    {{-- Lokasi Presensi --}}
+                    <div class="mb-3">
+                        <label for="lokasi_presensi" class="form-label fw-bold">Lokasi Presensi</label>
+                        <select name="lokasi_presensi" class="form-select" required>
+                            <option value="">-- Pilih Lokasi Presensi --</option>
+                            @foreach (['FEB', 'FH', 'FISIP', 'FK', 'FKIP', 'FKp', 'FMIPA', 'FP', 'FPK', 'FT', 'LPPM', 'LPPMP', 'Pascasarjana', 'Rektorat', 'RSP', 'UPT Bahasa', 'UPT Pustaka', 'UPT TIK'] as $lokasi)
+                                <option value="{{ $lokasi }}"
+                                    {{ old('lokasi_presensi', $user->lokasi_presensi) == $lokasi ? 'selected' : '' }}>
+                                    {{ $lokasi }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+                    {{-- Nomor HP --}}
+                    <div class="mb-3">
+                        <label for="contact_phone" class="form-label fw-bold">Nomor HP</label>
+                        <input type="text" name="contact_phone" class="form-control"
+                            value="{{ old('contact_phone', $user->contact_phone) }}">
+                    </div>
+
+                    {{-- Email Lain --}}
+                    <div class="mb-3">
+                        <label for="email_address" class="form-label fw-bold">Email Lain</label>
+                        <input type="email" name="email_address" class="form-control"
+                            value="{{ old('email_address', $user->email_address) }}">
+                    </div>
+
+                    {{-- Tempat & Tanggal Lahir --}}
+                    <div class="mb-3">
+                        <label for="tempat_lahir" class="form-label fw-bold">Tempat Lahir</label>
+                        <input type="text" name="tempat_lahir" class="form-control"
+                            value="{{ old('tempat_lahir', $user->tempat_lahir) }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tanggal_lahir" class="form-label fw-bold">Tanggal Lahir</label>
+                        <input type="date" name="tanggal_lahir" class="form-control"
+                            value="{{ old('tanggal_lahir', $user->tanggal_lahir) }}">
+                    </div>
+
+                    {{-- Password --}}
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-bold">Password Baru</label>
+                        <input type="password" name="password" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password_confirmation" class="form-label fw-bold">Konfirmasi Password</label>
+                        <input type="password" name="password_confirmation" class="form-control">
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <a href="{{ route('user.profile.index') }}" class="btn btn-secondary">Batal</a>
+                </form>
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" id="email"
-                class="form-control @error('email') is-invalid @enderror"
-                value="{{ old('email', $user->email) }}" required>
-            @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="password" class="form-label">Password Baru (Opsional)</label>
-            <input type="password" name="password" id="password"
-                class="form-control @error('password') is-invalid @enderror">
-            @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-            <input type="password" name="password_confirmation" id="password_confirmation"
-                class="form-control">
-        </div>
-
-        <button type="submit" class="btn btn-success">Simpan</button>
-        <a href="{{ route('user.profile.index') }}" class="btn btn-secondary">Batal</a>
-    </form>
-</div>
+    </div>
 @endsection

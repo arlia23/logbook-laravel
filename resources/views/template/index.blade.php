@@ -40,8 +40,13 @@
     <!-- endbuild -->
 
     <link rel="stylesheet" href="{{ asset('template/vendor/libs/apex-charts/apex-charts.css') }}" />
+    
 
     <!-- Page CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
     <!-- Helpers -->
     <script src="{{ asset('template/vendor/js/helpers.js') }}"></script>
@@ -90,7 +95,7 @@
     <!-- / Layout wrapper -->
 
     <!-- Core JS -->
-
+    
     <script src="{{ asset('template/vendor/libs/jquery/jquery.js') }}"></script>
 
     <script src="{{ asset('template/vendor/libs/popper/popper.js') }}"></script>
@@ -115,4 +120,6 @@
     <!-- Place this tag before closing body tag for github widget button. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
   </body>
+  <!-- Bootstrap JS (pastikan ini ada di bawah body) -->
+
 </html>

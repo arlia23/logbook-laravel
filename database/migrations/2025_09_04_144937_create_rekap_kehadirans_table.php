@@ -21,6 +21,9 @@ return new class extends Migration
             $table->integer('jumlah_cuti')->default(0);
             $table->integer('jumlah_sakit')->default(0);
             $table->integer('jumlah_alpha')->default(0);
+            $table->integer('jumlah_telat')->default(0);
+            $table->integer('jumlah_wfo')->default(0);
+            $table->integer('jumlah_wfh')->default(0);
             $table->timestamps();
         });
     }
