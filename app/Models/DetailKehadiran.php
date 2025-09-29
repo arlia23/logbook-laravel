@@ -2,25 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @mixin IdeHelperPresensi
- */
-class Presensi extends Model
+class DetailKehadiran extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'tanggal',
-        'jam_masuk',
-        'jam_pulang',
-        'status_kehadiran',
+        'status',
+        'kegiatan',
     ];
 
-    // Relasi ke User
     public function user()
     {
         return $this->belongsTo(User::class);

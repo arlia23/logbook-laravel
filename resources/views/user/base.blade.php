@@ -114,22 +114,52 @@
                                     ini?</p>
 
                                 {{-- Tombol Masuk --}}
-                                <form action="{{ route('presensi.masuk') }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button type="submit" style="margin-top: 30px;"
-                                        class="btn btn-{{ !$presensi || !$presensi->jam_masuk ? 'primary' : 'success' }} w-100 mb-2"
-                                        {{ $presensi && $presensi->jam_masuk && !$presensi->jam_pulang ? 'disabled' : '' }}>
-                                        <i class="bx bx-bell"></i>
-                                        @if (!$presensi || !$presensi->jam_masuk)
-                                            Masuk
-                                        @else
-                                            Masuk {{ date('H:i:s', strtotime($presensi->jam_masuk)) }}
-                                        @endif
-                                    </button>
-                                    <p class="text-start" style="color: black">
-                                        Jadwal hadir sebelum jam 09:00.
-                                    </p>
-                                </form>
+                               {{-- Tombol Masuk --}}
+<button type="button" 
+    class="btn btn-{{ !$presensi || !$presensi->jam_masuk ? 'primary' : 'success' }} w-100 mb-2"
+    data-bs-toggle="modal"
+    data-bs-target="#modalPresensiMasuk"
+    {{ $presensi && $presensi->jam_masuk && !$presensi->jam_pulang ? 'disabled' : '' }}>
+    <i class="bx bx-bell"></i>
+    @if (!$presensi || !$presensi->jam_masuk)
+        Masuk
+    @else
+        Masuk {{ date('H:i:s', strtotime($presensi->jam_masuk)) }}
+    @endif
+</button>
+<p class="text-start" style="color: black">
+    Jadwal hadir sebelum jam 09:00.
+</p>
+
+<!-- Modal Presensi Masuk -->
+<div class="modal fade" id="modalPresensiMasuk" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ route('presensi.store') }}">
+      @csrf
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Presensi Masuk</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <label for="kegiatan" class="form-label">Pilih Kegiatan</label>
+          <select name="kegiatan" id="kegiatan" class="form-select" required>
+            <option value="">-- Pilih --</option>
+            <option value="WFO">WFO</option>
+            <option value="WFH">WFH</option>
+          </select>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Rekam Jam Masuk</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
 
                                 {{-- Tombol Pulang --}}
                                 <button class="btn btn-success w-100" data-bs-toggle="modal" style="margin-top: 10px;"
@@ -153,11 +183,11 @@
                                 @endif
                             </div>
                         </div>
-                    </div>
+                     </div>
 
 
-                    <!-- Modal Logbook Pulang -->
-                    <div class="modal fade" id="modalLogbook" tabindex="-1">
+                     <!-- Modal Logbook Pulang -->
+                     <div class="modal fade" id="modalLogbook" tabindex="-1">
                         <div class="modal-dialog modal-lg">
                             <form id="logbookForm" method="POST" action="{{ route('logbook.store') }}">
                                 @csrf

@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperLokasiPresensi
+ * @mixin IdeHelperKehadiran
  */
-class LokasiPresensi extends Model
+class Kehadiran extends Model
 {
     //
 }

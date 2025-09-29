@@ -54,12 +54,13 @@
                     <div class="text-truncate" data-i18n="Catatan">Catatan Supervisor</div>
                 </a>
             </li>
-
             <li class="menu-item">
-                <a href="#" class="menu-link">
+                <a href="{{ route('user.rekap.index') }}" class="menu-link">
                     <div>Kehadiran</div>
                 </a>
             </li>
+
+
         </ul>
     </li>
     <li class="menu-item">
@@ -80,21 +81,4 @@
             @csrf
         </form>
     </li>
-
-
-
 </ul>
-
-<!-- resources/views/template/menu/menuUser.blade.php -->
-{{-- <li class="menu-item">
-  <a href="{{ route('index.home') }}" class="menu-link">
-    <i class="menu-icon tf-icons bx bx-home"></i>
-    <div>Dashboard</div>
-  </a>
-</li>
-<li class="menu-item">
-  <a href="#" class="menu-link">
-    <i class="menu-icon tf-icons bx bx-user"></i>
-    <div>Profil</div>
-  </a>
-</li> --}}

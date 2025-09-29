@@ -15,9 +15,11 @@ use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\UserBaseController;
 use App\Http\Controllers\User\UserCutiController;
 use App\Http\Controllers\User\UserDinasLuarController;
+use App\Http\Controllers\User\UserKehadiranController;
 use App\Http\Controllers\User\UserPresensiController;
 use App\Http\Controllers\User\UserLogbookController;
 use App\Http\Controllers\User\UserMonitoringController;
+use App\Http\Controllers\User\UserRekapController;
 use App\Http\Controllers\User\UserSakitController;
 
 
@@ -94,28 +96,32 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
 
 //ini untuk user
 Route::prefix('user')->middleware(['auth', 'isUser'])->group(function () {
+    // 🏠 DASHBOARD
     Route::controller(UserBaseController::class)->group(function () {
         Route::get('/home', 'index')->name('index.home');
     });
 
+    // 👤 PROFILE
     Route::controller(ProfileController::class)->group(function () {
-        Route::get('/profile', 'index')->name('user.profile.index'); // tampilkan profil
-        Route::get('/profile/edit', 'edit')->name('user.profile.edit'); // form edit
-        Route::put('/profile', 'update')->name('user.profile.update'); // simpan perubahan
+        Route::get('/profile', 'index')->name('user.profile.index');
+        Route::get('/profile/edit', 'edit')->name('user.profile.edit');
+        Route::put('/profile', 'update')->name('user.profile.update');
     });
 
+    // ⏰ PRESENSI
     Route::controller(UserPresensiController::class)->group(function () {
-        Route::get('/presensi',  [UserPresensiController::class, 'index'])->name('presensi.index');
-        Route::post('/presensi/masuk', [UserPresensiController::class, 'masuk'])->name('presensi.masuk');
+        Route::get('/presensi', 'index')->name('presensi.index');
+        Route::post('/presensi/masuk', 'masuk')->name('presensi.masuk');
         Route::post('/presensi', 'store')->name('presensi.store');
     });
 
     // 📝 LOGBOOK
     Route::controller(UserLogbookController::class)->group(function () {
-        Route::get('/logbook', [UserLogbookController::class, 'index'])->name('logbook.index');
+        Route::get('/logbook', 'index')->name('logbook.index');
         Route::post('/logbook', 'store')->name('logbook.store');
     });
 
+    // 📖 HELP
     Route::get('/help', function () {
         return view('user.help');
     })->name('user.help');
@@ -126,8 +132,8 @@ Route::prefix('user')->middleware(['auth', 'isUser'])->group(function () {
         Route::get('/dinas-luar/create', 'create')->name('user.dinas.create');
         Route::post('/dinas-luar', 'store')->name('user.dinas.store');
         Route::get('/dinas-luar/{id}', 'show')->name('user.dinas.show');
-        Route::put('/dinas-luar/{dinasLuar}', 'update')->name('user.dinas.update');
         Route::get('/dinas-luar/{dinasLuar}/edit', 'edit')->name('user.dinas.edit');
+        Route::put('/dinas-luar/{dinasLuar}', 'update')->name('user.dinas.update');
         Route::delete('/dinas-luar/{dinasLuar}', 'destroy')->name('user.dinas.destroy');
     });
 
@@ -148,11 +154,23 @@ Route::prefix('user')->middleware(['auth', 'isUser'])->group(function () {
         Route::get('/cuti/create', 'create')->name('user.cuti.create');
         Route::post('/cuti', 'store')->name('user.cuti.store');
         Route::get('/cuti/{id}', 'show')->name('user.cuti.show');
-        Route::get('/cuti/{cuti}/edit', [UserCutiController::class, 'edit'])->name('user.cuti.edit');
-        Route::put('/cuti/{cuti}', [UserCutiController::class, 'update'])->name('user.cuti.update');
-        Route::delete('/cuti/{cuti}', [UserCutiController::class, 'destroy'])->name('user.cuti.destroy');
+        Route::get('/cuti/{cuti}/edit', 'edit')->name('user.cuti.edit');
+        Route::put('/cuti/{cuti}', 'update')->name('user.cuti.update');
+        Route::delete('/cuti/{cuti}', 'destroy')->name('user.cuti.destroy');
     });
+
+    // 📊 MONITORING
     Route::controller(UserMonitoringController::class)->group(function () {
         Route::get('/monitoring', 'index')->name('user.monitoring.index');
+    });
+
+    // 📌 KEHADIRAN
+    Route::controller(UserKehadiranController::class)->group(function () {
+        Route::get('/kehadiran', 'index')->name('user.kehadiran.index');
+    });
+
+    // 📊 REKAP KEHADIRAN
+    Route::controller(UserRekapController::class)->group(function () {
+        Route::get('/rekap', 'index')->name('user.rekap.index');
     });
 });
