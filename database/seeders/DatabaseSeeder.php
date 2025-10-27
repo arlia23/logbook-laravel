@@ -21,10 +21,8 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            LogbookSeeder::class
-            // UserSeeder::class,
-            // CategoriSeeder::class
-            // ProdukSeeder::class
+            // LogbookSeeder::class
+            UserSeeder::class,
         ]);
     }
 }
