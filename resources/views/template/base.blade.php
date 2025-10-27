@@ -1,576 +1,326 @@
 @extends('template.index')
 
 @section('title', 'Dashboard AdminCraft')
-            <!-- Content -->
-            @section('main')
-            <div class="row">
-                <div class="col-xxl-8 mb-6 order-0">
-                  <div class="card">
-                    <div class="d-flex align-items-start row">
-                      <div class="col-sm-7">
+<!-- Content -->
+@section('main')
+    <div class="row">
+        <div class="col-xxl-8 mb-6 order-0">
+            <div class="card">
+                <div class="d-flex align-items-start row">
+                    <div class="col-sm-7">
                         <div class="card-body">
-                          <h5 class="card-title text-primary mb-3">Congratulations John! 🎉</h5>
-                          <p class="mb-6">
-                            You have done 72% more sales today.<br />Check your new badge in your profile.
-                          </p>
-
-                          <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>
+                            <h5 class="card-title text-primary mb-3">Selamat Datang {{ Auth::user()->name }}</h5>
+                            <p class="mb-6">Yuk, lanjutkan aktivitasmu hari ini dan<br /> Jangan lupa isi Logbook.</p>
+                            <p style="color: rgb(165, 51, 6)">Mulailah hari dengan niat baik dan semangat baru 🌞</p>
                         </div>
-                      </div>
-                      <div class="col-sm-5 text-center text-sm-left">
+                    </div>
+                    <div class="col-sm-5 text-center text-sm-left">
                         <div class="card-body pb-0 px-0 px-md-6">
-                          <img
-                            src="{{ asset('template/img/illustrations/man-with-laptop.png') }}"
-                            height="175"
-                            alt="View Badge User" />
+                            <img src="{{ asset('template/img/illustrations/man-with-laptop.png') }}" height="175"
+                                alt="View Badge User" />
                         </div>
-                      </div>
                     </div>
-                  </div>
                 </div>
-                <div class="col-xxl-4 col-lg-12 col-md-4 order-1">
-                  <div class="row">
-                    <div class="col-lg-6 col-md-12 col-6 mb-6">
-                      <div class="card h-100">
-                        <div class="card-body">
-                          <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                            <div class="avatar flex-shrink-0">
-                              <img
-                                src="{{ asset('template/img/icons/unicons/chart-success.png') }}"
-                                alt="chart success"
-                                class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                              <button
-                                class="btn p-0"
-                                type="button"
-                                id="cardOpt3"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="icon-base bx bx-dots-vertical-rounded text-body-secondary"></i>
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mb-1">Profit</p>
-                          <h4 class="card-title mb-3">$12,628</h4>
-                          <small class="text-success fw-medium"
-                            ><i class="icon-base bx bx-up-arrow-alt"></i> +72.80%</small
-                          >
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12 col-6 mb-6">
-                      <div class="card h-100">
-                        <div class="card-body">
-                          <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                            <div class="avatar flex-shrink-0">
-                              <img
-                                src="{{ asset('template/img/icons/unicons/wallet-info.png') }}"
-                                alt="wallet info"
-                                class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                              <button
-                                class="btn p-0"
-                                type="button"
-                                id="cardOpt6"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="icon-base bx bx-dots-vertical-rounded text-body-secondary"></i>
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mb-1">Sales</p>
-                          <h4 class="card-title mb-3">$4,679</h4>
-                          <small class="text-success fw-medium"
-                            ><i class="icon-base bx bx-up-arrow-alt"></i> +28.42%</small
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Total Revenue -->
-                <div class="col-12 col-xxl-8 order-2 order-md-3 order-xxl-2 mb-6 total-revenue">
-                  <div class="card">
-                    <div class="row row-bordered g-0">
-                      <div class="col-lg-8">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                          <div class="card-title mb-0">
-                            <h5 class="m-0 me-2">Total Revenue</h5>
-                          </div>
-                          <div class="dropdown">
-                            <button
-                              class="btn p-0"
-                              type="button"
-                              id="totalRevenue"
-                              data-bs-toggle="dropdown"
-                              aria-haspopup="true"
-                              aria-expanded="false">
-                              <i class="icon-base bx bx-dots-vertical-rounded icon-lg text-body-secondary"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="totalRevenue">
-                              <a class="dropdown-item" href="javascript:void(0);">Select All</a>
-                              <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                              <a class="dropdown-item" href="javascript:void(0);">Share</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div id="totalRevenueChart" class="px-3"></div>
-                      </div>
-                      <div class="col-lg-4">
-  <div class="card-body px-xl-9 py-12 d-flex align-items-center flex-column">
-    
-    {{-- Dropdown Tahun + Tombol Presensi --}}
-    <div class="text-center mb-6">
-      <div class="btn-group">
-        <button type="button" class="btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#modalPresensi">
-          <i class="bx bx-bell"></i> Presensi
-        </button>
-      </div>
+            </div>
+        </div>
+        <div class="col-xxl-4 col-lg-12 col-md-4 order-1">
+            {{-- 2kotak --}}
+            <div class="row">
+    <div class="col-12 mb-6">
+        <div class="card h-100" style="display: flex; flex-direction: row; align-items: stretch; width: 100%;">
+
+            <!-- Bagian kiri: Jumlah Hadir Hari Ini -->
+            <div class="card-body" style="width: 50%; border-right: 1px solid #ddd; text-align: center;">
+                <div class="card-title d-flex align-items-start justify-content-between mb-4"></div>
+                <p class="mb-1" style="font-weight: 600;">Jumlah Hadir Hari Ini</p>
+
+                <!-- 🔹 Tambahkan ID agar bisa di-update lewat JS -->
+                <h4 class="card-title mb-3" id="hadir-count" style="font-size: 1.8rem; color: #28a745;">
+                    {{ $hadirHariIni ?? 0 }} Orang
+                </h4>
+
+                <small class="text-muted">Update otomatis setiap hari</small>
+            </div>
+
+            <!-- Bagian kanan: Tidak Hadir Hari Ini -->
+            <div class="card-body" style="width: 50%; text-align: center;">
+                <div class="card-title d-flex align-items-start justify-content-between mb-4"></div>
+                <p class="mb-1" style="font-weight: 600;">Tidak Hadir Hari Ini</p>
+
+                <!-- 🔹 Tambahkan ID juga di sini -->
+                <h4 class="card-title mb-3" id="tidak-hadir-count" style="font-size: 1.8rem; color: #dc3545;">
+                    {{ $tidakHadirHariIni ?? 0 }} Orang
+                </h4>
+
+                <small class="text-muted">Update otomatis setiap hari</small>
+            </div>
+
+        </div>
     </div>
-    
-    {{-- Info tambahan --}}
-    <div class="d-flex gap-11 justify-content-between">
-      <div class="d-flex">
-        <div class="avatar me-2">
-          <span class="avatar-initial rounded-2 bg-label-primary">
-            <i class="icon-base bx bx-dollar icon-lg text-primary"></i>
-          </span>
-        </div>
-        <div class="d-flex flex-column">
-          <small><script>document.write(new Date().getFullYear() - 1);</script></small>
-          <h6 class="mb-0">$32.5k</h6>
-        </div>
-      </div>
-      <div class="d-flex">
-        <div class="avatar me-2">
-          <span class="avatar-initial rounded-2 bg-label-info">
-            <i class="icon-base bx bx-wallet icon-lg text-info"></i>
-          </span>
-        </div>
-        <div class="d-flex flex-column">
-          <small><script>document.write(new Date().getFullYear() - 2);</script></small>
-          <h6 class="mb-0">$41.2k</h6>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
-{{-- MODAL PRESENSI --}}
-<div class="modal fade" id="modalPresensi" tabindex="-1">
-  <div class="modal-dialog">
-    <form method="POST" action="{{ route('presensi.store') }}">
-      @csrf
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Presensi Masuk</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <select name="kegiatan" class="form-control" required>
-            <option value="">-- Pilih --</option>
-            <option value="WFO">WFO</option>
-            <option value="WFH">WFH</option>
-          </select>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Rekam Jam Masuk</button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
+<!-- 🔹 Tambahkan script di bawah (bisa di section scripts atau langsung di bawah konten) -->
+<script>
+    function updateHadirData() {
+        fetch("{{ route('admin.hadirHariIni') }}") // route yang kita tambahkan di web.php
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("hadir-count").textContent = data.hadirHariIni + " Orang";
+                document.getElementById("tidak-hadir-count").textContent = data.tidakHadirHariIni + " Orang";
+            })
+            .catch(error => console.error('Gagal memuat data:', error));
+    }
 
-                    </div>
-                  </div>
-                </div>
-                <!--/ Total Revenue -->
-                <div class="col-12 col-md-8 col-lg-12 col-xxl-4 order-3 order-md-2 profile-report">
-                  <div class="row">
-                    <div class="col-6 mb-6 payments">
-                      <div class="card h-100">
-                        <div class="card-body">
-                          <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                            <div class="avatar flex-shrink-0">
-                              <img src="{{ asset('template/img/icons/unicons/paypal.png') }}" alt="paypal" class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                              <button
-                                class="btn p-0"
-                                type="button"
-                                id="cardOpt4"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="icon-base bx bx-dots-vertical-rounded text-body-secondary"></i>
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt4">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mb-1">Payments</p>
-                          <h4 class="card-title mb-3">$2,456</h4>
-                          <small class="text-danger fw-medium"
-                            ><i class="icon-base bx bx-down-arrow-alt"></i> -14.82%</small
-                          >
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6 mb-6 transactions">
-                      <div class="card h-100">
-                        <div class="card-body">
-                          <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                            <div class="avatar flex-shrink-0">
-                              <img src="{{ asset('template/img/icons/unicons/cc-primary.png') }}" alt="Credit Card" class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                              <button
-                                class="btn p-0"
-                                type="button"
-                                id="cardOpt1"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="icon-base bx bx-dots-vertical-rounded text-body-secondary"></i>
-                              </button>
-                              <div class="dropdown-menu" aria-labelledby="cardOpt1">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mb-1">Transactions</p>
-                          <h4 class="card-title mb-3">$14,857</h4>
-                          <small class="text-success fw-medium"
-                            ><i class="icon-base bx bx-up-arrow-alt"></i> +28.14%</small
-                          >
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-12 mb-6 profile-report">
-                      <div class="card h-100">
-                        <div class="card-body">
-                          <div
-                            class="d-flex justify-content-between align-items-center flex-sm-row flex-column gap-10 flex-wrap">
-                            <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                              <div class="card-title mb-6">
-                                <h5 class="text-nowrap mb-1">Profile Report</h5>
-                                <span class="badge bg-label-warning">YEAR 2022</span>
-                              </div>
-                              <div class="mt-sm-auto">
-                                <span class="text-success text-nowrap fw-medium"
-                                  ><i class="icon-base bx bx-up-arrow-alt"></i> 68.2%</span
-                                >
-                                <h4 class="mb-0">$84,686k</h4>
-                              </div>
-                            </div>
-                            <div id="profileReportChart"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <!-- Order Statistics -->
-                <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-6">
-                  <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between">
-                      <div class="card-title mb-0">
-                        <h5 class="mb-1 me-2">Order Statistics</h5>
-                        <p class="card-subtitle">42.82k Total Sales</p>
-                      </div>
-                      <div class="dropdown">
-                        <button
-                          class="btn text-body-secondary p-0"
-                          type="button"
-                          id="orederStatistics"
-                          data-bs-toggle="dropdown"
-                          aria-haspopup="true"
-                          aria-expanded="false">
-                          <i class="icon-base bx bx-dots-vertical-rounded icon-lg"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="orederStatistics">
-                          <a class="dropdown-item" href="javascript:void(0);">Select All</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Share</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between align-items-center mb-6">
-                        <div class="d-flex flex-column align-items-center gap-1">
-                          <h3 class="mb-1">8,258</h3>
-                          <small>Total Orders</small>
-                        </div>
-                        <div id="orderStatisticsChart"></div>
-                      </div>
-                      <ul class="p-0 m-0">
-                        <li class="d-flex align-items-center mb-5">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-primary"
-                              ><i class="icon-base bx bx-mobile-alt"></i
-                            ></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Electronic</h6>
-                              <small>Mobile, Earbuds, TV</small>
-                            </div>
-                            <div class="user-progress">
-                              <h6 class="mb-0">82.5k</h6>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-5">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-success"
-                              ><i class="icon-base bx bx-closet"></i
-                            ></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Fashion</h6>
-                              <small>T-shirt, Jeans, Shoes</small>
-                            </div>
-                            <div class="user-progress">
-                              <h6 class="mb-0">23.8k</h6>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-5">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-info"
-                              ><i class="icon-base bx bx-home-alt"></i
-                            ></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Decor</h6>
-                              <small>Fine Art, Dining</small>
-                            </div>
-                            <div class="user-progress">
-                              <h6 class="mb-0">849k</h6>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-secondary"
-                              ><i class="icon-base bx bx-football"></i
-                            ></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Sports</h6>
-                              <small>Football, Cricket Kit</small>
-                            </div>
-                            <div class="user-progress">
-                              <h6 class="mb-0">99</h6>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <!--/ Order Statistics -->
+    // 🔁 Jalankan pertama kali saat halaman dibuka
+    updateHadirData();
 
-                <!-- Expense Overview -->
-                <div class="col-md-6 col-lg-4 order-1 mb-6">
-                  <div class="card h-100">
-                    <div class="card-header nav-align-top">
-                      <ul class="nav nav-pills flex-wrap row-gap-2" role="tablist">
-                        <li class="nav-item">
-                          <button
-                            type="button"
-                            class="nav-link active"
-                            role="tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#navs-tabs-line-card-income"
-                            aria-controls="navs-tabs-line-card-income"
-                            aria-selected="true">
-                            Income
-                          </button>
-                        </li>
-                        <li class="nav-item">
-                          <button type="button" class="nav-link" role="tab">Expenses</button>
-                        </li>
-                        <li class="nav-item">
-                          <button type="button" class="nav-link" role="tab">Profit</button>
-                        </li>
-                      </ul>
+    // 🔁 Lalu update otomatis setiap 10 detik
+    setInterval(updateHadirData, 10000);
+</script>
+
+
+        </div>
+    </div>
+    <div class="row">
+
+        <!-- jumlah pegawai -->
+        <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-6">
+            <div class="card h-100">
+                <div class="card-header text-center">
+                    <h5 class="mb-1 me-2">Jumlah Pegawai Universitas Riau</h5>
+                    <p class="card-subtitle">Berdasarkan tipe pegawai</p>
+                </div>
+                <div class="card-body">
+                    <!-- Chart di Tengah -->
+                    <div class="d-flex justify-content-center align-items-center mb-4">
+                        <div id="pegawaiChart"></div>
                     </div>
-                    <div class="card-body">
-                      <div class="tab-content p-0">
-                        <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel">
-                          <div class="d-flex mb-6">
+
+                    <ul class="p-0 m-0">
+                        <li class="d-flex align-items-center mb-4">
                             <div class="avatar flex-shrink-0 me-3">
-                              <img src="{{ asset('template/img/icons/unicons/wallet.png') }}" alt="User" />
+                                <span class="avatar-initial rounded bg-label-danger">
+                                    <i class="icon-base bx bx-user"></i>
+                                </span>
                             </div>
-                            <div>
-                              <p class="mb-0">Total Balance</p>
-                              <div class="d-flex align-items-center">
-                                <h6 class="mb-0 me-1">$459.10</h6>
-                                <small class="text-success fw-medium">
-                                  <i class="icon-base bx bx-chevron-up icon-lg"></i>
-                                  42.9%
-                                </small>
-                              </div>
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <h6 class="mb-0">PNS</h6>
+                                <h6 class="mb-0">{{ number_format($jumlahPNS) }}</h6>
                             </div>
-                          </div>
-                          <div id="incomeChart"></div>
-                          <div class="d-flex align-items-center justify-content-center mt-6 gap-3">
-                            <div class="flex-shrink-0">
-                              <div id="expensesOfWeek"></div>
-                            </div>
-                            <div>
-                              <h6 class="mb-0">Income this week</h6>
-                              <small>$39k less than last week</small>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!--/ Expense Overview -->
-
-                <!-- Transactions -->
-                <div class="col-md-6 col-lg-4 order-2 mb-6">
-                  <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                      <h5 class="card-title m-0 me-2">Transactions</h5>
-                      <div class="dropdown">
-                        <button
-                          class="btn text-body-secondary p-0"
-                          type="button"
-                          id="transactionID"
-                          data-bs-toggle="dropdown"
-                          aria-haspopup="true"
-                          aria-expanded="false">
-                          <i class="icon-base bx bx-dots-vertical-rounded icon-lg"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
-                          <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-body pt-4">
-                      <ul class="p-0 m-0">
-                        <li class="d-flex align-items-center mb-6">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="{{ asset('template/img/icons/unicons/paypal.png') }}" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="d-block">Paypal</small>
-                              <h6 class="fw-normal mb-0">Send money</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-2">
-                              <h6 class="fw-normal mb-0">+82.6</h6>
-                              <span class="text-body-secondary">USD</span>
-                            </div>
-                          </div>
                         </li>
-                        <li class="d-flex align-items-center mb-6">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="{{ asset('template/img/icons/unicons/wallet.png') }}" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="d-block">Wallet</small>
-                              <h6 class="fw-normal mb-0">Mac'D</h6>
+                        <li class="d-flex align-items-center mb-4">
+                            <div class="avatar flex-shrink-0 me-3">
+                                <span class="avatar-initial rounded bg-label-warning">
+                                    <i class="icon-base bx bx-id-card"></i>
+                                </span>
                             </div>
-                            <div class="user-progress d-flex align-items-center gap-2">
-                              <h6 class="fw-normal mb-0">+270.69</h6>
-                              <span class="text-body-secondary">USD</span>
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <h6 class="mb-0">P3K</h6>
+                                <h6 class="mb-0">{{ number_format($jumlahP3K) }}</h6>
                             </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-6">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="{{ asset('template/img/icons/unicons/chart.png') }}" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="d-block">Transfer</small>
-                              <h6 class="fw-normal mb-0">Refund</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-2">
-                              <h6 class="fw-normal mb-0">+637.91</h6>
-                              <span class="text-body-secondary">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-6">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="{{ asset('template/img/icons/unicons/cc-primary.png') }}" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="d-block">Credit Card</small>
-                              <h6 class="fw-normal mb-0">Ordered Food</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-2">
-                              <h6 class="fw-normal mb-0">-838.71</h6>
-                              <span class="text-body-secondary">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-6">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="{{ asset('template/img/icons/unicons/wallet.png') }}" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="d-block">Wallet</small>
-                              <h6 class="fw-normal mb-0">Starbucks</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-2">
-                              <h6 class="fw-normal mb-0">+203.33</h6>
-                              <span class="text-body-secondary">USD</span>
-                            </div>
-                          </div>
                         </li>
                         <li class="d-flex align-items-center">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="{{ asset('template/img/icons/unicons/cc-warning.png') }}" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="d-block">Mastercard</small>
-                              <h6 class="fw-normal mb-0">Ordered Food</h6>
+                            <div class="avatar flex-shrink-0 me-3">
+                                <span class="avatar-initial rounded bg-label-success">
+                                    <i class="icon-base bx bx-group"></i>
+                                </span>
                             </div>
-                            <div class="user-progress d-flex align-items-center gap-2">
-                              <h6 class="fw-normal mb-0">-92.45</h6>
-                              <span class="text-body-secondary">USD</span>
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <h6 class="mb-0">PHL</h6>
+                                <h6 class="mb-0">{{ number_format($jumlahPHL) }}</h6>
                             </div>
-                          </div>
                         </li>
-                      </ul>
-                    </div>
-                  </div>
+                    </ul>
                 </div>
-                <!--/ Transactions -->
-              </div>
-            @endsection
-            
-              
+            </div>
+        </div>
+        <!--/ jumlah pegawai -->
+
+        <!-- Chart Script -->
+        @push('scripts')
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    var options = {
+                        series: [{{ $jumlahPNS }}, {{ $jumlahP3K }}, {{ $jumlahPHL }}],
+                        chart: {
+                            height: 220, // ✅ Biar besar seperti chart laporanmu
+                            type: 'donut',
+                        },
+                        labels: ['PNS', 'P3K', 'PHL'],
+                        colors: ['#ff4560', '#ffb84d', '#00E396'],
+                        legend: {
+                            show: false // ❌ Tetap sembunyikan legend di samping
+                        },
+                        plotOptions: {
+                            pie: {
+                                donut: {
+                                    size: '60%', // ✅ Garis donat lebih tebal & besar
+                                    labels: {
+                                        show: true,
+                                        total: {
+                                            show: true,
+                                            label: 'Total',
+                                            fontSize: '14px',
+                                            color: '#333',
+                                            formatter: () =>
+                                                '{{ number_format($jumlahPNS + $jumlahP3K + $jumlahPHL) }}'
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    var chart = new ApexCharts(document.querySelector("#pegawaiChart"), options);
+                    chart.render();
+                });
+            </script>
+        @endpush
+
+
+
+
+        <!-- Expense Overview -->
+        <!-- Persentase Pengisian Logbook -->
+        <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-6">
+            <div class="card h-100">
+                <div class="card-header text-center">
+                    <h5 class="mb-1 me-2">Persentase Pengisian Logbook</h5>
+                    <p class="card-subtitle">Bulan {{ \Carbon\Carbon::now()->translatedFormat('F') }}</p>
+                    <small>(Persentase update otomatis, realtime setiap hari)</small>
+                </div>
+                <div class="card-body text-center">
+                    <div id="logbookChart" class="d-flex justify-content-center align-items-center mb-3"></div>
+
+                    <ul class="list-unstyled text-start mx-auto" style="max-width: 250px;">
+                        <li class="d-flex align-items-center mb-2">
+                            <span class="badge rounded-pill me-2" style="background-color: #00E396;">&nbsp;</span>
+                            <span>{{ $usersTerisi }} Logbook terisi</span>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <span class="badge rounded-pill me-2" style="background-color: #FF4560;">&nbsp;</span>
+                            <span>{{ $usersBelumIsi }} Logbook tidak terisi</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--/ Expense Overview -->
+
+        <!-- Transactions -->
+        <div class="col-md-6 col-lg-4 order-2 mb-6">
+            <div class="card h-100">
+                <div class="card-header text-center">
+                    <h5 class="mb-1 me-2">Persentase Laporan</h5>
+                    <p class="card-subtitle">Bulan {{ \Carbon\Carbon::now()->translatedFormat('F') }}</p>
+                    <small>(Data realtime per hari)</small>
+                </div>
+
+                <div class="card-body text-center">
+                    <div id="persentaseLaporanChart" style="height: 200px"></div>
+
+                    <ul class="list-unstyled text-start mx-auto mt-3" style="max-width: 250px;">
+                        <li class="d-flex align-items-center mb-2">
+                            <span class="badge rounded-pill me-2" style="background-color: #008FFB;">&nbsp;</span>
+                            <span>{{ $persenDL }}% Dinas Luar</span>
+                        </li>
+                        <li class="d-flex align-items-center mb-2">
+                            <span class="badge rounded-pill me-2" style="background-color: #00E396;">&nbsp;</span>
+                            <span>{{ $persenHadir }}% Hadir</span>
+                        </li>
+                        <li class="d-flex align-items-center mb-2">
+                            <span class="badge rounded-pill me-2" style="background-color: #FEB019;">&nbsp;</span>
+                            <span>{{ $persenCuti }}% Cuti</span>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <span class="badge rounded-pill me-2" style="background-color: #FF4560;">&nbsp;</span>
+                            <span>{{ $persenSakit }}% Sakit</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--/ Transactions -->
+    </div>
+@endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // === Persentase Pengisian Logbook (chart pertama) ===
+            var logbookChart = new ApexCharts(document.querySelector("#logbookChart"), {
+                series: [{{ $persentaseIsi }}, {{ $persentaseTidakIsi }}],
+                chart: {
+                    height: 200,
+                    type: 'donut',
+                },
+                labels: ['Terisi', 'Tidak isi'],
+                colors: ['#00E396', '#FF4560'],
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '60%',
+                            labels: {
+                                show: true,
+                                total: {
+                                    show: true,
+                                    label: '{{ round($persentaseTidakIsi, 1) }}%',
+                                    fontSize: '22px',
+                                    fontWeight: 700,
+                                    color: '#000',
+                                    formatter: () => 'Tidak isi'
+                                }
+                            }
+                        }
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                legend: {
+                    show: false
+                }
+            });
+            logbookChart.render();
+
+
+            // === Persentase Laporan (chart kedua) ===
+            var laporanChart = new ApexCharts(document.querySelector("#persentaseLaporanChart"), {
+                series: [{{ $persenDL }}, {{ $persenHadir }}, {{ $persenCuti }},
+                    {{ $persenSakit }}
+                ],
+                chart: {
+                    height: 250,
+                    type: 'donut'
+                },
+                labels: ['Dinas Luar', 'Hadir', 'Cuti', 'Sakit'],
+                colors: ['#008FFB', '#00E396', '#FEB019', '#FF4560'],
+                dataLabels: {
+                    enabled: true,
+                    formatter: (val) => val.toFixed(1) + "%"
+                },
+                legend: {
+                    show: false
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '60%',
+                            labels: {
+                                show: true,
+                                total: {
+                                    show: true,
+                                    label: 'Hadir',
+                                    formatter: () => '{{ $hadir }}'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            laporanChart.render();
+        });
+    </script>
+@endpush

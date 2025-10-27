@@ -30,12 +30,13 @@
                 <div class="col">
                     <label for="tgl_mulai" class="form-label">Tanggal Mulai</label>
                     <input type="date" name="tgl_mulai" class="form-control"
-                           value="{{ old('tgl_mulai', $dinasLuar->tgl_mulai) }}" required>
+                           value="{{ old('tgl_mulai', $dinasLuar->tgl_mulai) }}" readonly>
                 </div>
                 <div class="col">
                     <label for="tgl_selesai" class="form-label">Tanggal Selesai</label>
                     <input type="date" name="tgl_selesai" class="form-control"
-                           value="{{ old('tgl_selesai', $dinasLuar->tgl_selesai) }}" required>
+                           value="{{ old('tgl_selesai', $dinasLuar->tgl_selesai) }}"
+                           min="{{ $dinasLuar->tgl_mulai }}" required>
                 </div>
             </div>
 
@@ -63,7 +64,7 @@
             <div class="mb-3">
                 <label for="file_surat_tugas" class="form-label">File Surat Tugas (PDF/JPG/PNG, max 400KB)</label>
                 @if ($dinasLuar->file_surat_tugas)
-                    <p>File saat ini: 
+                    <p>File saat ini:
                         <a href="{{ asset('storage/' . $dinasLuar->file_surat_tugas) }}" target="_blank">Lihat File</a>
                     </p>
                 @endif

@@ -1,7 +1,7 @@
 <ul class="menu-inner py-1">
     <!-- Dashboards -->
     <li class="menu-item active open">
-        <a href="{{ route('index.home') }}" class="menu-link">
+        <a href="{{ route('user.home') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-home-smile"></i>
             <div class="text-truncate" data-i18n="Dashboards">Dashboards</div>
         </a>

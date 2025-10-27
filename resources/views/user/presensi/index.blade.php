@@ -35,7 +35,7 @@
     {{-- Modal Presensi --}}
     <div class="modal fade" id="modalPresensi" tabindex="-1" aria-labelledby="modalPresensiLabel" aria-hidden="true">
       <div class="modal-dialog">
-        <form method="POST" action="{{ route('presensi.store') }}">
+        <form method="POST" action="{{ route('user.presensi.masuk') }}">
           @csrf
           <div class="modal-content">
             <div class="modal-header">

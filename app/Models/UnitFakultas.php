@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @mixin IdeHelperUnitFakultas
- */
 class UnitFakultas extends Model
 {
-    //
+    use HasFactory;
+
+    protected $table = 'unit_fakultas';
+
+    protected $fillable = ['nama'];
 }

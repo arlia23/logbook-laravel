@@ -1,7 +1,7 @@
 <ul class="menu-inner py-1">
     <!-- Dashboards -->
     <li class="menu-item active open">
-        <a href="{{ route('index.home') }}" class="menu-link">
+        <a href="{{ route('admin.home') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-home-smile"></i>
             <div class="text-truncate" data-i18n="Dashboards">Dashboards</div>
         </a>
@@ -60,22 +60,16 @@
         </ul>
     </li>
 
-    <li class="menu-item">
-        <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-            <div class="text-truncate" data-i18n="Misc">Misc</div>
+     <li class="menu-item">
+        <a href="{{ route('logout') }}" class="menu-link"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="menu-icon tf-icons bx bx-power-off"></i>
+            <div>Log Out</div>
         </a>
-        <ul class="menu-sub">
-            <li class="menu-item">
-                <a href="pages-misc-error.html" class="menu-link">
-                    <div class="text-truncate" data-i18n="Error">Error</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="pages-misc-under-maintenance.html" class="menu-link">
-                    <div class="text-truncate" data-i18n="Under Maintenance">Under Maintenance</div>
-                </a>
-            </li>
-        </ul>
+
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
     </li>
+
 </ul>

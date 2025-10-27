@@ -41,6 +41,14 @@
         </form>
     </div>
 
+    <div class="mb-3 text-end">
+    <a href="{{ route('user.rekap.export', ['mode' => $mode, 'kategori' => $kategori, 'bulan' => $bulanAngka, 'tahun' => $tahun]) }}" 
+       class="btn btn-success">
+        Export Excel
+    </a>
+</div>
+
+
     {{-- 🔽 Table --}}
     <div class="card shadow-sm">
         <div class="table-responsive">
@@ -80,10 +88,27 @@
                             <tr>
                                 <td class="text-start ps-3">{{ $r['name'] }}</td>
                                 @foreach($r['data'] as $index => $status)
-                                    @php
-                                        $isSunday = in_array($index, $hariMingguIndex ?? []);
-                                    @endphp
-                                    <td @if($isSunday) style="background-color: #d0e7ff;" @endif>{{ $status }}</td>
+                                    @php $isSunday = in_array($index, $hariMingguIndex ?? []); @endphp
+                                    <td @if($isSunday) style="background-color: #d0e7ff;" @endif>
+                                        @if($status == 'H')
+                                            <span >H</span>
+                                            {{-- class="badge bg-success" --}}
+                                        @elseif($status == 'DL')
+                                            <span >DL</span>
+                                            {{-- class="badge bg-primary" --}}
+                                        @elseif($status == 'C')
+                                            <span >C</span>
+                                            {{-- class="badge bg-warning text-dark" --}}
+                                        @elseif($status == 'S')
+                                            <span >S</span>
+                                            {{-- class="badge bg-info text-dark" --}}
+                                        @elseif($status == 'A')
+                                            <span >A</span>
+                                            {{-- class="badge bg-danger" --}}
+                                        @else
+                                            {{-- kosong --}}
+                                        @endif
+                                    </td>
                                 @endforeach
                             </tr>
                         @endif

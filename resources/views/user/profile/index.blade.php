@@ -63,10 +63,10 @@
             </div>
             @endif
 
-            @if($user->email_address)
+            @if($user->email_konfirm)
             <div class="mb-3">
-                <label class="form-label fw-bold">Email Lain</label>
-                <div class="form-control bg-light">{{ $user->email_address }}</div>
+                <label class="form-label fw-bold">Konfirmasi Email</label>
+                <div class="form-control bg-light">{{ $user->email_konfirm }}</div>
             </div>
             @endif
 

@@ -11,18 +11,52 @@ use Illuminate\Support\Facades\Auth;
 
 class UserLogbookController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $logbooks = Logbook::where('user_id', Auth::id())
-            ->latest()
-            ->get();
+        $user = Auth::user();
 
-        $presensi = Presensi::where('user_id', Auth::id())
-            ->whereDate('tanggal', today())
-            ->first();
+        // Ambil bulan & tahun dari query string (default: bulan & tahun sekarang)
+        $bulan = $request->input('bulan', date('m'));
+        $tahun = $request->input('tahun', date('Y'));
+        $jenis = $request->input('jenis'); // WFO / WFH / null (semua)
+        $search = $request->input('search');
 
-        return view('user.logbook.index', compact('logbooks', 'presensi'));
+        $query = Logbook::where('user_id', $user->id)
+            ->whereMonth('tanggal', $bulan)
+            ->whereYear('tanggal', $tahun);
+
+        if ($jenis) {
+            $query->where('kegiatan', $jenis);
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('catatan_pekerjaan', 'like', "%$search%")
+                    ->orWhere('kegiatan', 'like', "%$search%");
+            });
+        }
+
+        $logbooks = $query->orderBy('tanggal', 'desc')->get();
+
+        return view('user.logbook.index', compact('logbooks', 'bulan', 'tahun', 'jenis', 'search', 'user'));
     }
+
+    public function cetak($jenis, Request $request)
+{
+    $user = Auth::user();
+    $bulan = $request->input('bulan', date('m'));
+    $tahun = $request->input('tahun', date('Y'));
+
+    $logbooks = Logbook::where('user_id', $user->id)
+        ->where('kegiatan', strtoupper($jenis))
+        ->whereMonth('tanggal', $bulan)
+        ->whereYear('tanggal', $tahun)
+        ->orderBy('tanggal', 'asc')
+        ->get();
+
+    return view('user.logbook.cetak', compact('logbooks', 'bulan', 'tahun', 'user', 'jenis'));
+}
+
 
     public function store(Request $request)
     {

@@ -1,585 +1,564 @@
 @extends('template.index')
 
 @section('title', 'Dashboard AdminCraft')
-<!-- Content -->
+
 @section('main')
     <div class="row">
-        <div class="col-xxl-8 mb-6 order-0">
-            <div class="card">
-                <div class="d-flex align-items-start row">
-                    <div class="col-sm-7">
-                        <div class="card-body">
-                            <h5 class="card-title text-primary mb-3">Congratulations HanuAluAQILAH</h5>
-                            <p class="mb-6">
-                                You have done 72% more sales today.<br />Check your new badge in your profile.
+        {{-- KOLOM KIRI --}}
+        <div class="col-xxl-8">
+            {{-- kotak awal --}}
+            <div class="mb-4">
+                <div class="card">
+                    <div class="d-flex align-items-start row">
+                        <div class="col-sm-7">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary mb-3">Selamat Datang {{ Auth::user()->name }}</h5>
+                                <p class="mb-6">Yuk, lanjutkan aktivitasmu hari ini dan<br /> Jangan lupa isi Logbook.</p>
+                                <p style="color: rgb(165, 51, 6)">Mulailah hari dengan niat baik dan semangat baru 🌞</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-5 text-center text-sm-left">
+                            <div class="card-body pb-0 px-0 px-md-6">
+                                <img src="{{ asset('template/img/illustrations/man-with-laptop.png') }}" height="175"
+                                    alt="View Badge User" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Grafik Order & Income --}}
+            <div class="row">
+                <!-- Persentase Laporan -->
+                <div class="col-md-6 mb-6">
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-header text-center">
+                            <h5 class="mb-1 fw-semibold ">Persentase Laporan</h5>
+                            <h6 class="text-primary mt-3">{{ \Carbon\Carbon::now()->translatedFormat('F Y') }}</h6>
+                        </div>
+
+                        <div class="card-body text-center position-relative">
+                            <div class="position-relative d-inline-block" style="width:200px; height:200px;">
+                                <canvas id="laporanChart" width="200" height="200"></canvas>
+                                <div id="laporanCenter"
+                                    class="position-absolute top-50 start-50 translate-middle text-center">
+                                    <div id="laporanLabel" class="fw-semibold text-secondary small">Hadir</div>
+                                    <div id="laporanValue" class="fw-bold fs-5 text-success">{{ $persenHadir ?? 0 }}%</div>
+                                </div>
+                            </div>
+
+                            <div class="mt-5">
+                                <ul class="list-unstyled d-inline-block text-start">
+                                    <li class="laporan-item mb-2" data-type="Hadir" data-value="{{ $persenHadir ?? 0 }}">
+                                        <span class="badge bg-success me-2">&nbsp;</span> Hadir
+                                    </li>
+                                    <li class="laporan-item mb-2" data-type="Dinas Luar" data-value="{{ $persenDL ?? 0 }}">
+                                        <span class="badge bg-primary me-2">&nbsp;</span> Dinas Luar
+                                    </li>
+                                    <li class="laporan-item mb-2" data-type="Cuti" data-value="{{ $persenCuti ?? 0 }}">
+                                        <span class="badge bg-warning me-2">&nbsp;</span> Cuti
+                                    </li>
+                                    <li class="laporan-item mb-2" data-type="Sakit" data-value="{{ $persenSakit ?? 0 }}">
+                                        <span class="badge bg-danger me-2">&nbsp;</span> Sakit
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                {{-- Persentase Pengisian Logbook --}}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm border-0 ">
+                        <div class="card-body text-center mt-3">
+                            <h5 class="card-title mb-2 fw-semibold">Persentase Pengisian Logbook</h5>
+                            <h6 class="text-primary mb-2">
+                                Bulan {{ \Carbon\Carbon::now()->translatedFormat('F') }}
+                            </h6>
+                            <p class="text-muted mb-4">
+                                (Persentase update otomatis, realtime setiap bulan)
                             </p>
 
-                            <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>
-                        </div>
-                    </div>
-                    <div class="col-sm-5 text-center text-sm-left">
-                        <div class="card-body pb-0 px-0 px-md-6">
-                            <img src="{{ asset('template/img/illustrations/man-with-laptop.png') }}" height="175"
-                                alt="View Badge User" />
+                            {{-- Grafik donut dengan teks di tengah --}}
+                            <div class="position-relative d-inline-block" style="width:220px; height:220px;">
+                                <canvas id="logbookChart" width="220" height="220"></canvas>
+
+                                {{-- Teks tengah --}}
+                                <div id="chartCenterText"
+                                    class="position-absolute top-50 start-50 translate-middle text-center">
+                                    <h6 id="centerLabel" class="mb-1 fw-semibold text-success">Terisi</h6>
+                                    <span id="centerValue" class="fw-bold fs-4">{{ $persenIsi }}%</span>
+                                </div>
+                            </div>
+
+                            {{-- Tombol interaktif --}}
+                            <div class="d-flex justify-content-center mb-4 gap-3">
+                                <button id="btnTerisi" class="btn btn-sm rounded-pill px-3 py-1 active"
+                                    style="background-color:#00c38d; color:white; border:none;">
+                                    Terisi
+                                </button>
+                                <button id="btnTidakIsi" class="btn btn-sm rounded-pill px-3 py-1"
+                                    style="background-color:#f06595; color:white; border:none; opacity:0.7;">
+                                    Tidak Isi
+                                </button>
+                            </div>
+
+                            {{-- Info detail --}}
+                            <ul class="list-unstyled mt-3 mb-2 small fw-semibold text-secondary">
+                                <li>
+                                    <span class="badge rounded-pill me-2" style="background-color:#00c38d;">&nbsp;</span>
+                                    {{ $totalIsi }} Logbook terisi
+                                </li>
+                                <li>
+                                    <span class="badge rounded-pill me-2" style="background-color:#f06595;">&nbsp;</span>
+                                    {{ $totalTidakIsi }} Logbook tidak terisi
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xxl-4 col-lg-12 col-md-4 order-1">
-            <div class="row">
-                <div class="col-lg-6 col-md-12 col-6 mb-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                                <div class="avatar flex-shrink-0">
-                                    <img src="{{ asset('template/img/icons/unicons/chart-success.png') }}"
-                                        alt="chart success" class="rounded" />
-                                </div>
-                                <div class="dropdown">
-                                    <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="icon-base bx bx-dots-vertical-rounded text-body-secondary"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                                        <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                        <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="mb-1">Profit</p>
-                            <h4 class="card-title mb-3">$12,628</h4>
-                            <small class="text-success fw-medium"><i class="icon-base bx bx-up-arrow-alt"></i>
-                                +72.80%</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12 col-6 mb-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                                <div class="avatar flex-shrink-0">
-                                    <img src="{{ asset('template/img/icons/unicons/wallet-info.png') }}" alt="wallet info"
-                                        class="rounded" />
-                                </div>
-                                <div class="dropdown">
-                                    <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="icon-base bx bx-dots-vertical-rounded text-body-secondary"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
-                                        <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                        <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="mb-1">Sales</p>
-                            <h4 class="card-title mb-3">$4,679</h4>
-                            <small class="text-success fw-medium"><i class="icon-base bx bx-up-arrow-alt"></i>
-                                +28.42%</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Total Revenue -->
-        <div class="col-12 col-xxl-8 order-2 order-md-3 order-xxl-2 mb-6 total-revenue">
-            <div class="card">
-                <div class="row row-bordered g-0">
-                    <div class="col-lg-8">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                            <div class="card-title mb-0">
-                                <h5 class="m-0 me-2">Total Revenue</h5>
-                            </div>
-                            <div class="dropdown">
-                                <button class="btn p-0" type="button" id="totalRevenue" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="icon-base bx bx-dots-vertical-rounded icon-lg text-body-secondary"></i>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="totalRevenue">
-                                    <a class="dropdown-item" href="javascript:void(0);">Select All</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Share</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="totalRevenueChart" class="px-3"></div>
-                    </div>
 
-                    <div class="col-lg-4">
-                        <div class="card shadow">
-                            <div class="card-body text-center py-4">
-                                <h5 class="card-title mb-2">Absensi Kehadiran - WFO/WFH</h5>
-                                <p class="mb-4" style="margin-top: 30px;">Apakah Anda sudah melakukan <br> presensi hari
-                                    ini?</p>
+        {{-- KOLOM KANAN --}}
+        <div class="col-xxl-4">
 
-                                {{-- Tombol Masuk --}}
-                               {{-- Tombol Masuk --}}
-<button type="button" 
-    class="btn btn-{{ !$presensi || !$presensi->jam_masuk ? 'primary' : 'success' }} w-100 mb-2"
-    data-bs-toggle="modal"
-    data-bs-target="#modalPresensiMasuk"
-    {{ $presensi && $presensi->jam_masuk && !$presensi->jam_pulang ? 'disabled' : '' }}>
-    <i class="bx bx-bell"></i>
-    @if (!$presensi || !$presensi->jam_masuk)
-        Masuk
-    @else
-        Masuk {{ date('H:i:s', strtotime($presensi->jam_masuk)) }}
-    @endif
-</button>
-<p class="text-start" style="color: black">
-    Jadwal hadir sebelum jam 09:00.
-</p>
+            {{-- Kotak Absen Presensi --}}
+            <div class="card h-50">
+                <div class="card-body text-center py-4">
+                    <h5 class="card-title mb-2">Absensi Kehadiran - WFO/WFH</h5>
+                    <p class="mb-4" style="margin-top: 30px;">Apakah Anda sudah melakukan <br> presensi hari ini?</p>
 
-<!-- Modal Presensi Masuk -->
-<div class="modal fade" id="modalPresensiMasuk" tabindex="-1">
-  <div class="modal-dialog">
-    <form method="POST" action="{{ route('presensi.store') }}">
-      @csrf
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Presensi Masuk</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
+                    {{-- Tombol Masuk --}}
+                    <button type="button"
+                        class="btn btn-{{ !$presensi || !$presensi->jam_masuk ? 'primary' : 'success' }} w-100 mb-2"
+                        data-bs-toggle="modal" data-bs-target="#modalPresensiMasuk"
+                        {{ $presensi && $presensi->jam_masuk && !$presensi->jam_pulang ? 'disabled' : '' }}>
+                        <i class="bx bx-bell"></i>
+                        @if (!$presensi || !$presensi->jam_masuk)
+                            Masuk
+                        @else
+                            Masuk {{ date('H:i:s', strtotime($presensi->jam_masuk)) }}
+                        @endif
+                    </button>
+                    <p class="text-start" style="color: black">
+                        Jadwal hadir sebelum jam 09:00.
+                    </p>
 
-        <div class="modal-body">
-          <label for="kegiatan" class="form-label">Pilih Kegiatan</label>
-          <select name="kegiatan" id="kegiatan" class="form-select" required>
-            <option value="">-- Pilih --</option>
-            <option value="WFO">WFO</option>
-            <option value="WFH">WFH</option>
-          </select>
-        </div>
-
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Rekam Jam Masuk</button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-
-
-
-                                {{-- Tombol Pulang --}}
-                                <button class="btn btn-success w-100" data-bs-toggle="modal" style="margin-top: 10px;"
-                                    data-bs-target="#modalLogbook"
-                                    {{ !$presensi || !$presensi->jam_masuk || $presensi->jam_pulang ? 'disabled' : '' }}>
-                                    <i class="bx bx-log-out"></i>
-                                    Pulang
-                                    {{ $presensi && $presensi->jam_pulang ? date('H:i:s', strtotime($presensi->jam_pulang)) : '' }}
-                                </button>
-                                <p class="text-start" style="color: black">
-                                    Jadwal presensi pulang mulai jam 16:00 s/d jam 23:00
-                                </p>
-
-                                {{-- Info waktu --}}
-                                @if ($presensi)
-                                    <hr class="my-4">
-                                    <div class="d-flex justify-content-between text-muted">
-                                        <div>Masuk : {{ $presensi->jam_masuk ?? '-' }}</div>
-                                        <div>Pulang : {{ $presensi->jam_pulang ?? '-' }}</div>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                     </div>
-
-
-                     <!-- Modal Logbook Pulang -->
-                     <div class="modal fade" id="modalLogbook" tabindex="-1">
-                        <div class="modal-dialog modal-lg">
-                            <form id="logbookForm" method="POST" action="{{ route('logbook.store') }}">
+                    <!-- Modal Presensi Masuk -->
+                    <div class="modal fade" id="modalPresensiMasuk" tabindex="-1">
+                        <div class="modal-dialog">
+                            {{-- ✅ Route diperbaiki ke user.presensi.masuk --}}
+                            <form method="POST" action="{{ route('user.presensi.masuk') }}">
                                 @csrf
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Isi Logbook Hari Ini</h5>
+                                        <h5 class="modal-title">Presensi Masuk</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
 
                                     <div class="modal-body">
-                                        @for ($i = 1; $i <= 10; $i++)
-                                            <div class="row mb-2">
-                                                <div class="col-md-9">
-                                                    <input type="text" name="catatan_pekerjaan[]" class="form-control"
-                                                        placeholder="Kegiatan {{ $i }}">
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <select name="status[]" class="form-control">
-                                                        <option value="Selesai">Selesai</option>
-                                                        <option value="Belum">Belum</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        @endfor
-
-                                        <!-- Tambahan hidden input jam_pulang -->
-                                        <input type="hidden" name="jam_pulang" id="jamPulang">
+                                        <label for="kegiatan" class="form-label">Pilih Kegiatan</label>
+                                        <select name="kegiatan" id="kegiatan" class="form-select" required>
+                                            <option value="">-- Pilih --</option>
+                                            <option value="WFO">WFO</option>
+                                            <option value="WFH">WFH</option>
+                                        </select>
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button id="btnSimpanLogbook" type="submit" class="btn btn-success">Simpan &
-                                            Pulang</button>
+                                        <button type="submit" class="btn btn-primary">Rekam Jam Masuk</button>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
 
+                    {{-- Tombol Pulang --}}
+
+                    @php
+                        $now = \Carbon\Carbon::now()->format('H:i');
+                        $bisaPulang = $now >= '16:00';
+                    @endphp
+
+                    <button class="btn btn-success w-100" data-bs-toggle="modal" style="margin-top: 10px;"
+                        data-bs-target="#modalLogbook"
+                        {{ !$presensi || !$presensi->jam_masuk || $presensi->jam_pulang ? 'disabled' : '' }}>
+                        <i class="bx bx-log-out"></i>
+                        Pulang
+                        {{ $presensi && $presensi->jam_pulang ? date('H:i:s', strtotime($presensi->jam_pulang)) : '' }}
+                    </button>
+                    <p class="text-start" style="color: black">
+                        Jadwal presensi pulang mulai jam 16:00 s/d jam 23:00
+                    </p>
+
+                    {{-- Info waktu --}}
+                    @if ($presensi)
+                        <hr class="my-4">
+                        <div class="d-flex justify-content-between text-muted">
+                            <div>Masuk : {{ $presensi->jam_masuk ?? '-' }}</div>
+                            <div>Pulang : {{ $presensi->jam_pulang ?? '-' }}</div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Modal Logbook Pulang -->
+            <div class="modal fade" id="modalLogbook" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    {{-- ✅ Route diperbaiki ke user.presensi.pulang --}}
+                    <form id="logbookForm" method="POST" action="{{ route('user.presensi.pulang') }}">
+                        @csrf
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Isi Logbook Hari Ini</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                @for ($i = 1; $i <= 10; $i++)
+                                    <div class="row mb-2">
+                                        <div class="col-md-9">
+                                            <input type="text" name="catatan_pekerjaan[]" class="form-control"
+                                                placeholder="Kegiatan {{ $i }}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select name="status[]" class="form-control">
+                                                <option value="Selesai">Selesai</option>
+                                                <option value="Belum">Belum</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                @endfor
+                                <input type="hidden" name="jam_pulang" id="jamPulang">
+                            </div>
+
+                            <div class="modal-footer">
+                                <button id="btnSimpanLogbook" type="submit" class="btn btn-success">
+                                    Simpan & Pulang
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
 
-                </div>
-            </div>
-        </div>
-        <!--/ Total Revenue -->
-        <div class="col-12 col-md-8 col-lg-12 col-xxl-4 order-3 order-md-2 profile-report">
-            <div class="row">
-                <div class="col-6 mb-6 payments">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                                <div class="avatar flex-shrink-0">
-                                    <img src="{{ asset('template/img/icons/unicons/paypal.png') }}" alt="paypal"
-                                        class="rounded" />
+            {{-- Jumlah Pegawai Universitas Riau --}}
+            <div class="mb-4 mt-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        {{-- Header --}}
+                        <div class="d-flex align-items-start justify-content-between mb-1">
+                            <h5 class="card-title mb-0 text-primary fw-semibold">
+                                Jumlah Pegawai Universitas Riau
+                            </h5>
+                            <div class="dropdown">
+                                <button class="btn p-0" type="button" id="cardOptMain" data-bs-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <i class="bx bx-dots-vertical-rounded text-body-secondary"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOptMain">
+                                    <a class="dropdown-item" href="#">View More</a>
+                                    <a class="dropdown-item" href="#">Delete</a>
                                 </div>
-                                <div class="dropdown">
-                                    <button class="btn p-0" type="button" id="cardOpt4" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="icon-base bx bx-dots-vertical-rounded text-body-secondary"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt4">
-                                        <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                        <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="mb-1">Payments</p>
-                            <h4 class="card-title mb-3">$2,456</h4>
-                            <small class="text-danger fw-medium"><i class="icon-base bx bx-down-arrow-alt"></i>
-                                -14.82%</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 mb-6 transactions">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                                <div class="avatar flex-shrink-0">
-                                    <img src="{{ asset('template/img/icons/unicons/cc-primary.png') }}" alt="Credit Card"
-                                        class="rounded" />
-                                </div>
-                                <div class="dropdown">
-                                    <button class="btn p-0" type="button" id="cardOpt1" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="icon-base bx bx-dots-vertical-rounded text-body-secondary"></i>
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="cardOpt1">
-                                        <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                        <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="mb-1">Transactions</p>
-                            <h4 class="card-title mb-3">$14,857</h4>
-                            <small class="text-success fw-medium"><i class="icon-base bx bx-up-arrow-alt"></i>
-                                +28.14%</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 mb-6 profile-report">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div
-                                class="d-flex justify-content-between align-items-center flex-sm-row flex-column gap-10 flex-wrap">
-                                <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                                    <div class="card-title mb-6">
-                                        <h5 class="text-nowrap mb-1">Profile Report</h5>
-                                        <span class="badge bg-label-warning">YEAR 2022</span>
-                                    </div>
-                                    <div class="mt-sm-auto">
-                                        <span class="text-success text-nowrap fw-medium"><i
-                                                class="icon-base bx bx-up-arrow-alt"></i> 68.2%</span>
-                                        <h4 class="mb-0">$84,686k</h4>
-                                    </div>
-                                </div>
-                                <div id="profileReportChart"></div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <!-- Order Statistics -->
-        <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-6">
-            <div class="card h-100">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="card-title mb-0">
-                        <h5 class="mb-1 me-2">Order Statistics</h5>
-                        <p class="card-subtitle">42.82k Total Sales</p>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn text-body-secondary p-0" type="button" id="orederStatistics"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="icon-base bx bx-dots-vertical-rounded icon-lg"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="orederStatistics">
-                            <a class="dropdown-item" href="javascript:void(0);">Select All</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Share</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-6">
-                        <div class="d-flex flex-column align-items-center gap-1">
-                            <h3 class="mb-1">8,258</h3>
-                            <small>Total Orders</small>
-                        </div>
-                        <div id="orderStatisticsChart"></div>
-                    </div>
-                    <ul class="p-0 m-0">
-                        <li class="d-flex align-items-center mb-5">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <span class="avatar-initial rounded bg-label-primary"><i
-                                        class="icon-base bx bx-mobile-alt"></i></span>
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <h6 class="mb-0">Electronic</h6>
-                                    <small>Mobile, Earbuds, TV</small>
-                                </div>
-                                <div class="user-progress">
-                                    <h6 class="mb-0">82.5k</h6>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-5">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <span class="avatar-initial rounded bg-label-success"><i
-                                        class="icon-base bx bx-closet"></i></span>
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <h6 class="mb-0">Fashion</h6>
-                                    <small>T-shirt, Jeans, Shoes</small>
-                                </div>
-                                <div class="user-progress">
-                                    <h6 class="mb-0">23.8k</h6>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-5">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <span class="avatar-initial rounded bg-label-info"><i
-                                        class="icon-base bx bx-home-alt"></i></span>
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <h6 class="mb-0">Decor</h6>
-                                    <small>Fine Art, Dining</small>
-                                </div>
-                                <div class="user-progress">
-                                    <h6 class="mb-0">849k</h6>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex align-items-center">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <span class="avatar-initial rounded bg-label-secondary"><i
-                                        class="icon-base bx bx-football"></i></span>
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <h6 class="mb-0">Sports</h6>
-                                    <small>Football, Cricket Kit</small>
-                                </div>
-                                <div class="user-progress">
-                                    <h6 class="mb-0">99</h6>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!--/ Order Statistics -->
 
-        <!-- Expense Overview -->
-        <div class="col-md-6 col-lg-4 order-1 mb-6">
-            <div class="card h-100">
-                <div class="card-header nav-align-top">
-                    <ul class="nav nav-pills flex-wrap row-gap-2" role="tablist">
-                        <li class="nav-item">
-                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                data-bs-target="#navs-tabs-line-card-income" aria-controls="navs-tabs-line-card-income"
-                                aria-selected="true">
-                                Income
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="nav-link" role="tab">Expenses</button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="nav-link" role="tab">Profit</button>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content p-0">
-                        <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel">
-                            <div class="d-flex mb-6">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <img src="{{ asset('template/img/icons/unicons/wallet.png') }}" alt="User" />
-                                </div>
-                                <div>
-                                    <p class="mb-0">Total Balance</p>
-                                    <div class="d-flex align-items-center">
-                                        <h6 class="mb-0 me-1">$459.10</h6>
-                                        <small class="text-success fw-medium">
-                                            <i class="icon-base bx bx-chevron-up icon-lg"></i>
-                                            42.9%
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="incomeChart"></div>
-                            <div class="d-flex align-items-center justify-content-center mt-6 gap-3">
-                                <div class="flex-shrink-0">
-                                    <div id="expensesOfWeek"></div>
-                                </div>
-                                <div>
-                                    <h6 class="mb-0">Income this week</h6>
-                                    <small>$39k less than last week</small>
-                                </div>
-                            </div>
+                        {{-- Chart --}}
+                        <div class="d-flex flex-column align-items-center justify-content-center">
+                            <div id="pegawaiChart" style="min-height: 230px; width: 100%;"></div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--/ Expense Overview -->
 
-        <!-- Transactions -->
-        <div class="col-md-6 col-lg-4 order-2 mb-6">
-            <div class="card h-100">
-                <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="card-title m-0 me-2">Transactions</h5>
-                    <div class="dropdown">
-                        <button class="btn text-body-secondary p-0" type="button" id="transactionID"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="icon-base bx bx-dots-vertical-rounded icon-lg"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
-                            <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
+                        {{-- Legend --}}
+                        <div class="mt-4 text-center">
+                            <ul id="pegawaiLegend"
+                                class="list-unstyled mb-0 d-flex justify-content-center flex-wrap small fw-semibold text-secondary gap-3">
+                                <li class="legend-item active d-flex align-items-center" data-index="0" data-label="PNS"
+                                    data-value="{{ $jumlahPNS ?? 0 }}">
+                                    <span class="legend-dot me-2" style="background-color:#4B77BE;"></span>
+                                    {{ number_format($jumlahPNS ?? 0) }} PNS
+                                </li>
+                                <li class="legend-item d-flex align-items-center" data-index="1" data-label="P3K"
+                                    data-value="{{ $jumlahP3K ?? 0 }}">
+                                    <span class="legend-dot me-2" style="background-color:#10B981;"></span>
+                                    {{ number_format($jumlahP3K ?? 0) }} P3K
+                                </li>
+                                <li class="legend-item d-flex align-items-center" data-index="2" data-label="PHL"
+                                    data-value="{{ $jumlahPHL ?? 0 }}">
+                                    <span class="legend-dot me-2" style="background-color:#9CA3AF;"></span>
+                                    {{ number_format($jumlahPHL ?? 0) }} PHL
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <div class="card-body pt-4">
-                    <ul class="p-0 m-0">
-                        <li class="d-flex align-items-center mb-6">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ asset('template/img/icons/unicons/paypal.png') }}" alt="User"
-                                    class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <small class="d-block">Paypal</small>
-                                    <h6 class="fw-normal mb-0">Send money</h6>
-                                </div>
-                                <div class="user-progress d-flex align-items-center gap-2">
-                                    <h6 class="fw-normal mb-0">+82.6</h6>
-                                    <span class="text-body-secondary">USD</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-6">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ asset('template/img/icons/unicons/wallet.png') }}" alt="User"
-                                    class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <small class="d-block">Wallet</small>
-                                    <h6 class="fw-normal mb-0">Mac'D</h6>
-                                </div>
-                                <div class="user-progress d-flex align-items-center gap-2">
-                                    <h6 class="fw-normal mb-0">+270.69</h6>
-                                    <span class="text-body-secondary">USD</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-6">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ asset('template/img/icons/unicons/chart.png') }}" alt="User"
-                                    class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <small class="d-block">Transfer</small>
-                                    <h6 class="fw-normal mb-0">Refund</h6>
-                                </div>
-                                <div class="user-progress d-flex align-items-center gap-2">
-                                    <h6 class="fw-normal mb-0">+637.91</h6>
-                                    <span class="text-body-secondary">USD</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-6">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ asset('template/img/icons/unicons/cc-primary.png') }}" alt="User"
-                                    class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <small class="d-block">Credit Card</small>
-                                    <h6 class="fw-normal mb-0">Ordered Food</h6>
-                                </div>
-                                <div class="user-progress d-flex align-items-center gap-2">
-                                    <h6 class="fw-normal mb-0">-838.71</h6>
-                                    <span class="text-body-secondary">USD</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-6">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ asset('template/img/icons/unicons/wallet.png') }}" alt="User"
-                                    class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <small class="d-block">Wallet</small>
-                                    <h6 class="fw-normal mb-0">Starbucks</h6>
-                                </div>
-                                <div class="user-progress d-flex align-items-center gap-2">
-                                    <h6 class="fw-normal mb-0">+203.33</h6>
-                                    <span class="text-body-secondary">USD</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="d-flex align-items-center">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ asset('template/img/icons/unicons/cc-warning.png') }}" alt="User"
-                                    class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <small class="d-block">Mastercard</small>
-                                    <h6 class="fw-normal mb-0">Ordered Food</h6>
-                                </div>
-                                <div class="user-progress d-flex align-items-center gap-2">
-                                    <h6 class="fw-normal mb-0">-92.45</h6>
-                                    <span class="text-body-secondary">USD</span>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
             </div>
-        </div>
-        <!--/ Transactions -->
-    </div>
+
+
+        </div> {{-- END KOLOM KANAN --}}
+    </div> {{-- END ROW --}}
+
+
+
+
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+        <script>
+            // === CHART LOGBOOK ===
+            const ctx = document.getElementById('logbookChart');
+            const chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Isi', 'Tidak Isi'],
+                    datasets: [{
+                        data: [{{ $persenIsi }}, {{ $persenTidakIsi }}],
+                        backgroundColor: ['#00c38d', '#f06595'],
+                        borderWidth: 1,
+                        cutout: '78%',
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+                    responsive: false,
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true
+                    }
+                }
+            });
+
+            const labelEl = document.getElementById('centerLabel');
+            const valueEl = document.getElementById('centerValue');
+            const btnTerisi = document.getElementById('btnTerisi');
+            const btnTidakIsi = document.getElementById('btnTidakIsi');
+
+            btnTerisi.addEventListener('click', () => {
+                btnTerisi.style.opacity = '1';
+                btnTidakIsi.style.opacity = '0.7';
+                labelEl.textContent = 'Terisi';
+                labelEl.classList.remove('text-danger');
+                labelEl.classList.add('text-success');
+                valueEl.textContent = '{{ $persenIsi }}%';
+            });
+
+            btnTidakIsi.addEventListener('click', () => {
+                btnTidakIsi.style.opacity = '1';
+                btnTerisi.style.opacity = '0.7';
+                labelEl.textContent = 'Tidak Isi';
+                labelEl.classList.remove('text-success');
+                labelEl.classList.add('text-danger');
+                valueEl.textContent = '{{ $persenTidakIsi }}%';
+            });
+
+
+            // === CHART PEGAWAI UNRI ===
+            var jumlahPNS = {{ $jumlahPNS ?? 0 }};
+            var jumlahP3K = {{ $jumlahP3K ?? 0 }};
+            var jumlahPHL = {{ $jumlahPHL ?? 0 }};
+
+            var labels = ['PNS', 'P3K', 'PHL'];
+            var series = [jumlahPNS, jumlahP3K, jumlahPHL];
+            var colors = ['#4B77BE', '#10B981', '#9CA3AF'];
+            var activeIndex = 0;
+
+            var pegawaiChart = new ApexCharts(document.querySelector("#pegawaiChart"), {
+                series: series,
+                chart: {
+                    type: 'donut',
+                    height: 230,
+                    toolbar: {
+                        show: false
+                    },
+                    events: {
+                        dataPointSelection: function(event, chartContext, config) {
+                            var index = config.dataPointIndex;
+                            activeIndex = index;
+                            updateCenter(index);
+                            updateLegend(index);
+                            highlightSlice(index);
+                        }
+                    }
+                },
+                labels: labels,
+                colors: colors,
+                plotOptions: {
+                    pie: {
+                        expandOnClick: false,
+                        donut: {
+                            size: '70%',
+                            labels: {
+                                show: true,
+                                name: {
+                                    show: true,
+                                    color: '#6B7280',
+                                    fontSize: '14px',
+                                    offsetY: 25
+                                },
+                                value: {
+                                    show: true,
+                                    fontSize: '24px',
+                                    fontWeight: 700,
+                                    color: '#111827',
+                                    offsetY: -20,
+                                    formatter: val => parseInt(val).toLocaleString()
+                                },
+                                total: {
+                                    show: true,
+                                    label: labels[0],
+                                    fontSize: '15px',
+                                    color: '#6B7280',
+                                    formatter: () => series[0].toLocaleString()
+                                }
+                            }
+                        }
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    width: 4,
+                    colors: ['#fff']
+                },
+                legend: {
+                    show: false
+                },
+                tooltip: {
+                    y: {
+                        formatter: val => val.toLocaleString() + ' Pegawai'
+                    }
+                }
+            });
+
+            pegawaiChart.render();
+
+            function updateCenter(index) {
+                pegawaiChart.updateOptions({
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    total: {
+                                        label: labels[index],
+                                        formatter: () => series[index].toLocaleString()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function updateLegend(index) {
+                document.querySelectorAll('#pegawaiLegend .legend-item').forEach((li, i) => {
+                    li.classList.toggle('active', i === index);
+                });
+            }
+
+            function highlightSlice(index) {
+                pegawaiChart.toggleDataPointSelection(index);
+            }
+
+            document.querySelectorAll('#pegawaiLegend .legend-item').forEach((item, index) => {
+                item.addEventListener('click', function() {
+                    activeIndex = index;
+                    updateCenter(index);
+                    updateLegend(index);
+                    highlightSlice(index);
+                });
+            });
+
+
+            // === CHART PERSENTASE LAPORAN (PER BULAN) ===
+            const laporanCtx = document.getElementById('laporanChart');
+
+            const laporanChart = new Chart(laporanCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Hadir', 'Dinas Luar', 'Cuti', 'Sakit'],
+                    datasets: [{
+                        data: [
+                            {{ $persenHadir ?? 0 }},
+                            {{ $persenDL ?? 0 }},
+                            {{ $persenCuti ?? 0 }},
+                            {{ $persenSakit ?? 0 }}
+                        ],
+                        backgroundColor: ['#10B981', '#3B82F6', '#FACC15', '#EF4444'],
+                        borderColor: '#fff',
+                        borderWidth: 1, // ✅ lebih tebal
+                        hoverBorderWidth: 7, // tebal saat di-hover
+                        cutout: '78%',
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: '#111827',
+                            titleColor: '#fff',
+                            bodyColor: '#e5e7eb',
+                            displayColors: false,
+                            padding: 10,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.formattedValue || 0;
+                                    return `${label}: ${value}%`;
+                                }
+                            }
+                        },
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true,
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                    },
+                    responsive: false,
+                }
+            });
+
+            // === INTERAKSI DINAMIS ===
+            const laporanItems = document.querySelectorAll('.laporan-item');
+            const laporanLabel = document.getElementById('laporanLabel');
+            const laporanValue = document.getElementById('laporanValue');
+
+            laporanItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const type = item.dataset.type;
+                    const value = item.dataset.value;
+
+                    laporanLabel.textContent = type;
+                    laporanValue.textContent = `${value}%`;
+
+                    laporanValue.classList.remove('text-success', 'text-primary', 'text-warning',
+                        'text-danger');
+                    if (type === 'Hadir') laporanValue.classList.add('text-success');
+                    else if (type === 'Dinas Luar') laporanValue.classList.add('text-primary');
+                    else if (type === 'Cuti') laporanValue.classList.add('text-warning');
+                    else if (type === 'Sakit') laporanValue.classList.add('text-danger');
+                });
+            });
+        </script>
+    @endpush
+
+
 @endsection

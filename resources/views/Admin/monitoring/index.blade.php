@@ -1,7 +1,11 @@
 @extends('template.index')
 
+@section('title', 'Monitoring Mingguan')
+
 @section('main')
 <div class="container-xxl flex-grow-1 container-p-y">
+
+    <!-- Filter Minggu -->
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">📊 Monitoring Mingguan Pegawai</h5>
@@ -25,6 +29,7 @@
         </div>
     </div>
 
+    <!-- Data Tabel Monitoring -->
     <div class="card">
         <div class="card-datatable table-responsive">
             <table class="table table-striped table-hover align-middle">
@@ -40,51 +45,53 @@
                 </thead>
                 <tbody>
                     @foreach($data as $index => $item)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $item['user']->name }}</td>
-                            <td>
-                                {{ \Carbon\Carbon::parse($item['minggu_mulai'])->format('d M') }}
-                                -
-                                {{ \Carbon\Carbon::parse($item['minggu_selesai'])->format('d M Y') }}
-                            </td>
-                            <td>
-                                @if($item['ringkasan_pekerjaan'])
-                                    {!! nl2br(e($item['ringkasan_pekerjaan'])) !!}
-                                @else
-                                    <span class="text-muted"><i class="bx bx-info-circle"></i> Tidak ada data</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if($item['catatan_supervisor'])
-                                    <span class="badge bg-label-info">{{ $item['catatan_supervisor'] }}</span>
-                                @else
-                                    <form method="post" action="{{ route('admin.monitoring.store') }}">
-                                        @csrf
-                                        <input type="hidden" name="user_id" value="{{ $item['user']->id }}">
-                                        <input type="hidden" name="minggu_mulai" value="{{ $item['minggu_mulai'] }}">
-                                        <input type="hidden" name="minggu_selesai" value="{{ $item['minggu_selesai'] }}">
-                                        <div class="mb-2">
-                                            <textarea name="catatan_supervisor" rows="3" class="form-control"
-                                                placeholder="Tulis catatan supervisor..."></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-sm btn-success">
-                                            <i class="bx bx-save"></i> Simpan
-                                        </button>
-                                    </form>
-                                @endif
-                            </td>
-                            <td>
-                                @if($item['catatan_supervisor'] && $item['id'])
-                                    <button type="button"
-                                        class="btn btn-sm btn-outline-primary btn-edit"
-                                        data-id="{{ $item['id'] }}"
-                                        data-catatan="{{ $item['catatan_supervisor'] }}">
-                                        <i class="bx bx-edit-alt"></i> Edit
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $item['user']->name }}</td>
+                        <td>
+                            {{ \Carbon\Carbon::parse($item['minggu_mulai'])->format('d M') }} -
+                            {{ \Carbon\Carbon::parse($item['minggu_selesai'])->format('d M Y') }}
+                        </td>
+                        <td>
+                            @if($item['ringkasan_pekerjaan'])
+                                {!! nl2br(e($item['ringkasan_pekerjaan'])) !!}
+                            @else
+                                <span class="text-muted"><i class="bx bx-info-circle"></i> Tidak ada data</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($item['catatan_supervisor'])
+                                <span class="badge bg-label-info">{{ $item['catatan_supervisor'] }}</span>
+                            @else
+                                <form method="post" action="{{ route('admin.monitoring.store') }}">
+                                    @csrf
+                                    <input type="hidden" name="user_id" value="{{ $item['user']->id }}">
+                                    <input type="hidden" name="minggu_mulai" value="{{ $item['minggu_mulai'] }}">
+                                    <input type="hidden" name="minggu_selesai" value="{{ $item['minggu_selesai'] }}">
+                                    <div class="mb-2">
+                                        <textarea name="catatan_supervisor" rows="3" class="form-control"
+                                            placeholder="Tulis catatan supervisor..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-success" title="Simpan Catatan">
+                                        <i class="bx bx-save"></i> Simpan
                                     </button>
-                                @endif
-                            </td>
-                        </tr>
+                                </form>
+                            @endif
+                        </td>
+                        <td>
+                            @if($item['catatan_supervisor'] && $item['id'])
+                                <button type="button"
+                                    class="btn btn-sm btn-outline-primary btn-edit"
+                                    data-id="{{ $item['id'] }}"
+                                    data-catatan="{{ $item['catatan_supervisor'] }}"
+                                    title="Edit Catatan Supervisor">
+                                    <i class="bx bx-edit-alt"></i> Edit
+                                </button>
+                            @else
+                                <span class="text-muted">-</span>
+                            @endif
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -93,7 +100,7 @@
 </div>
 
 <!-- Modal Edit -->
-<div class="modal fade" id="editModal" tabindex="-1">
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <form method="post" action="{{ route('admin.monitoring.update') }}">
             @csrf
@@ -102,10 +109,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Catatan Supervisor</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <textarea class="form-control" name="catatan_supervisor" id="edit-catatan" rows="4"></textarea>
+                    <textarea class="form-control" name="catatan_supervisor" id="edit-catatan" rows="4"
+                        placeholder="Tulis catatan baru di sini..."></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -119,13 +127,19 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.btn-edit').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('edit-id').value = this.dataset.id;
-            document.getElementById('edit-catatan').value = this.dataset.catatan;
-            new bootstrap.Modal(document.getElementById('editModal')).show();
-        });
+$(document).ready(function () {
+    // Pastikan Bootstrap 5 modal bekerja
+    $(document).on('click', '.btn-edit', function () {
+        const id = $(this).data('id');
+        const catatan = $(this).data('catatan');
+
+        // Isi data ke dalam modal
+        $('#edit-id').val(id);
+        $('#edit-catatan').val(catatan);
+
+        // Tampilkan modal edit
+        const modal = new bootstrap.Modal(document.getElementById('editModal'));
+        modal.show();
     });
 });
 </script>

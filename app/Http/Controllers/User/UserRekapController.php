@@ -14,154 +14,212 @@ class UserRekapController extends Controller
         $tahun = $request->input('tahun', date('Y'));
         $mode = $request->input('mode', 'rekap');
         $kategori = $request->input('kategori', '');
+        $today = date('Y-m-d'); // ✅ Hari ini
 
         $listBulan = [
-            '01' => 'Januari', '02' => 'Februari', '03' => 'Maret',
-            '04' => 'April', '05' => 'Mei', '06' => 'Juni',
-            '07' => 'Juli', '08' => 'Agustus', '09' => 'September',
-            '10' => 'Oktober', '11' => 'November', '12' => 'Desember',
+            '01' => 'Januari',
+            '02' => 'Februari',
+            '03' => 'Maret',
+            '04' => 'April',
+            '05' => 'Mei',
+            '06' => 'Juni',
+            '07' => 'Juli',
+            '08' => 'Agustus',
+            '09' => 'September',
+            '10' => 'Oktober',
+            '11' => 'November',
+            '12' => 'Desember',
         ];
 
         $bulan = $listBulan[$bulanAngka] ?? $bulanAngka;
         $listTahun = range(date('Y') - 5, date('Y') + 1);
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $bulanAngka, $tahun);
 
-        // Ambil semua pegawai
+        // Ambil semua user (kecuali admin)
         $users = DB::table('users')->where('role', '!=', 'admin');
-        if ($kategori) $users->where('tipe_user', $kategori);
+        if ($kategori) {
+            $users->where('tipe_user', $kategori);
+        }
         $users = $users->orderBy('name')->get();
 
+        // List semua tanggal dalam bulan
+        $tanggalList = [];
         $hariMingguIndex = [];
+        for ($i = 1; $i <= $daysInMonth; $i++) {
+            $tanggal = sprintf('%04d-%02d-%02d', $tahun, $bulanAngka, $i);
+            $tanggalList[] = $tanggal;
+            if (date('N', strtotime($tanggal)) == 7) {
+                $hariMingguIndex[] = $i - 1;
+            }
+        }
 
-        // Referensi waktu
-        $today = date('Y-m-d');
-        $bulanSekarang = date('m');
-        $tahunSekarang = date('Y');
-        $tanggalHariIni = date('d');
+        // Ambil semua detail kehadiran bulan ini
+        $detailKehadiran = DB::table('detail_kehadirans')
+            ->whereYear('tanggal', $tahun)
+            ->whereMonth('tanggal', $bulanAngka)
+            ->get()
+            ->groupBy('user_id');
+
+        // Ambil cuti, sakit, dinas luar
+        $cuti = DB::table('cuti')
+            ->select('user_id', 'tgl_mulai', 'tgl_selesai')
+            ->get()
+            ->groupBy('user_id');
+
+        $sakit = DB::table('sakit')
+            ->select('user_id', 'tgl_mulai', 'tgl_selesai')
+            ->get()
+            ->groupBy('user_id');
+
+        $dinas = DB::table('dinas_luar')
+            ->select('user_id', 'tgl_mulai', 'tgl_selesai')
+            ->get()
+            ->groupBy('user_id');
 
         if ($mode === 'rekap') {
-            // ✅ Hitung HK = total hari kerja sebulan penuh (tanpa Minggu)
+            // ✅ Mode REKAP
             $hariKerja = 0;
-            for ($day = 1; $day <= $daysInMonth; $day++) {
-                $tanggal = sprintf('%04d-%02d-%02d', $tahun, $bulanAngka, $day);
-                if (date('N', strtotime($tanggal)) != 7) {
+            foreach ($tanggalList as $tgl) {
+                if (date('N', strtotime($tgl)) != 7) {
                     $hariKerja++;
                 }
             }
 
-            // Batas tanggal hanya sampai hari ini kalau bulan berjalan
-            $lastDay = ($bulanAngka == $bulanSekarang && $tahun == $tahunSekarang)
-                ? $tanggalHariIni
-                : $daysInMonth;
+            $rekap = [];
 
-            $query = DB::table('users')
-                ->leftJoin('detail_kehadirans', function ($join) use ($tahun, $bulanAngka, $lastDay, $bulanSekarang, $tahunSekarang) {
-                    $join->on('users.id', '=', 'detail_kehadirans.user_id')
-                         ->whereYear('tanggal', $tahun)
-                         ->whereMonth('tanggal', $bulanAngka);
+            foreach ($users as $user) {
+                $hadir = $dl = $cutiCount = $sakitCount = $alpha = $wfo = $wfh = 0;
 
-                    // kalau bulan berjalan → batasi hanya sampai hari ini
-                    if ($bulanAngka == $bulanSekarang && $tahun == $tahunSekarang) {
-                        $join->whereDay('tanggal', '<=', $lastDay);
+                foreach ($tanggalList as $tgl) {
+                    if (date('N', strtotime($tgl)) == 7) {
+                        continue; // skip Minggu
                     }
-                })
-                ->where('users.role', '!=', 'admin');
 
-            if ($kategori) $query->where('users.tipe_user', $kategori);
+                    $status = null; // default kosong
 
-            $rekap = $query->select(
-                    'users.id', 'users.name',
-                    DB::raw("$hariKerja as hk"),
-                    DB::raw("COALESCE(SUM(CASE WHEN status = 'Hadir' THEN 1 ELSE 0 END),0) as hadir"),
-                    DB::raw("COALESCE(SUM(CASE WHEN status = 'DL' THEN 1 ELSE 0 END),0) as dl"),
-                    DB::raw("COALESCE(SUM(CASE WHEN status = 'Cuti' THEN 1 ELSE 0 END),0) as cuti"),
-                    DB::raw("COALESCE(SUM(CASE WHEN status = 'Sakit' THEN 1 ELSE 0 END),0) as sakit"),
-                    DB::raw("COALESCE(SUM(CASE WHEN kegiatan = 'WFO' THEN 1 ELSE 0 END),0) as wfo"),
-                    DB::raw("COALESCE(SUM(CASE WHEN kegiatan = 'WFH' THEN 1 ELSE 0 END),0) as wfh")
-                )
-                ->groupBy('users.id', 'users.name')
-                ->orderBy('users.name')
-                ->get()
-                ->map(function ($row) use ($tahun, $bulanAngka, $hariKerja, $bulanSekarang, $tahunSekarang, $tanggalHariIni, $daysInMonth) {
-                    // ✅ Alpha dihitung hanya sampai hari ini kalau bulan berjalan
-                    $effectiveHK = $hariKerja;
-                    if ($bulanAngka == $bulanSekarang && $tahun == $tahunSekarang) {
-                        $effectiveHK = 0;
-                        for ($d = 1; $d <= $tanggalHariIni; $d++) {
-                            $tanggal = sprintf('%04d-%02d-%02d', $tahun, $bulanAngka, $d);
-                            if (date('N', strtotime($tanggal)) != 7) {
-                                $effectiveHK++;
+                    // cek izin
+                    if (isset($cuti[$user->id])) {
+                        foreach ($cuti[$user->id] as $c) {
+                            if ($tgl >= $c->tgl_mulai && $tgl <= $c->tgl_selesai) {
+                                $status = 'C';
+                                break;
                             }
                         }
                     }
-                    $row->alpha = $effectiveHK - ($row->hadir + $row->dl + $row->cuti + $row->sakit);
-                    return $row;
-                });
+                    if (!$status && isset($sakit[$user->id])) {
+                        foreach ($sakit[$user->id] as $s) {
+                            if ($tgl >= $s->tgl_mulai && $tgl <= $s->tgl_selesai) {
+                                $status = 'S';
+                                break;
+                            }
+                        }
+                    }
+                    if (!$status && isset($dinas[$user->id])) {
+                        foreach ($dinas[$user->id] as $d) {
+                            if ($tgl >= $d->tgl_mulai && $tgl <= $d->tgl_selesai) {
+                                $status = 'DL';
+                                break;
+                            }
+                        }
+                    }
 
-        } else {
-            // Mode DETAIL
-            $tanggalList = [];
+                    // override dengan detail absensi
+                    $log = isset($detailKehadiran[$user->id])
+                        ? $detailKehadiran[$user->id]->firstWhere('tanggal', $tgl)
+                        : null;
 
-            for ($i = 1; $i <= $daysInMonth; $i++) {
-                $tanggal = sprintf('%04d-%02d-%02d', $tahun, $bulanAngka, $i);
-                $tanggalList[] = $tanggal;
+                    if ($log) {
+                        $status = $log->status;
+                        if ($log->status == 'H' && $log->kegiatan == 'WFO') {
+                            $wfo++;
+                        } elseif ($log->status == 'H' && $log->kegiatan == 'WFH') {
+                            $wfh++;
+                        }
+                    }
 
-                if (date('N', strtotime($tanggal)) == 7) {
-                    $hariMingguIndex[] = $i - 1; // 0-based index
+                    // ✅ Alfa hanya dihitung kalau tanggal <= hari ini dan status masih kosong
+                    if (!$status && $tgl <= $today) {
+                        $status = 'A';
+                    }
+
+                    // Hitung agregasi
+                    if ($status == 'H') $hadir++;
+                    elseif ($status == 'DL') $dl++;
+                    elseif ($status == 'C') $cutiCount++;
+                    elseif ($status == 'S') $sakitCount++;
+                    elseif ($status == 'A') $alpha++;
                 }
+
+                $rekap[] = (object)[
+                    'id'    => $user->id,
+                    'name'  => $user->name,
+                    'hk'    => $hariKerja,
+                    'hadir' => $hadir,
+                    'dl'    => $dl,
+                    'cuti'  => $cutiCount,
+                    'sakit' => $sakitCount,
+                    'alpha' => $alpha,
+                    'wfo'   => $wfo,
+                    'wfh'   => $wfh,
+                ];
             }
-
-            $logbookData = DB::table('logbooks')
-                ->select('user_id', 'tanggal', 'kegiatan', 'status')
-                ->whereYear('tanggal', $tahun)
-                ->whereMonth('tanggal', $bulanAngka)
-                ->get()
-                ->groupBy('user_id');
-
+        } else {
+            // ✅ Mode DETAIL
             $rekap = [];
 
             foreach ($users as $user) {
                 $baris = ['name' => $user->name, 'data' => []];
 
-                foreach ($tanggalList as $tanggal) {
-                    // Jika Minggu
-                    if (date('N', strtotime($tanggal)) == 7) {
-                        $baris['data'][] = '';
+                foreach ($tanggalList as $tgl) {
+                    if (date('N', strtotime($tgl)) == 7) {
+                        $baris['data'][] = ''; // kosong Minggu
                         continue;
                     }
 
-                    // Kalau tanggal belum lewat → kosong
-                    if ($tanggal > $today) {
-                        $status = '';
-                    } else {
-                        $log = isset($logbookData[$user->id])
-                            ? $logbookData[$user->id]->firstWhere('tanggal', $tanggal)
-                            : null;
+                    $status = null;
 
-                        if (!$log) {
-                            $status = 'A'; // lewat tapi kosong → Alpha
-                        } else {
-                            if (strtolower($log->status) === 'selesai') {
-                                switch (strtoupper($log->kegiatan)) {
-                                    case 'WFO':
-                                    case 'WFH':
-                                        $status = 'H'; break;
-                                    case 'DL':
-                                        $status = 'DL'; break;
-                                    case 'CUTI':
-                                        $status = 'C'; break;
-                                    case 'SAKIT':
-                                        $status = 'S'; break;
-                                    default:
-                                        $status = 'H'; break;
-                                }
-                            } else {
-                                $status = 'A';
+                    // cek izin
+                    if (isset($cuti[$user->id])) {
+                        foreach ($cuti[$user->id] as $c) {
+                            if ($tgl >= $c->tgl_mulai && $tgl <= $c->tgl_selesai) {
+                                $status = 'C';
+                                break;
+                            }
+                        }
+                    }
+                    if (!$status && isset($sakit[$user->id])) {
+                        foreach ($sakit[$user->id] as $s) {
+                            if ($tgl >= $s->tgl_mulai && $tgl <= $s->tgl_selesai) {
+                                $status = 'S';
+                                break;
+                            }
+                        }
+                    }
+                    if (!$status && isset($dinas[$user->id])) {
+                        foreach ($dinas[$user->id] as $d) {
+                            if ($tgl >= $d->tgl_mulai && $tgl <= $d->tgl_selesai) {
+                                $status = 'DL';
+                                break;
                             }
                         }
                     }
 
-                    $baris['data'][] = $status;
+                    // override absensi
+                    $log = isset($detailKehadiran[$user->id])
+                        ? $detailKehadiran[$user->id]->where('tanggal', '=', $tgl)->values()->first()
+                        : null;
+
+
+                    if ($log) {
+                        $status = $log->status;
+                    }
+
+                    // Alfa hanya kalau sudah lewat atau hari ini
+                    if (!$status && $tgl <= $today) {
+                        $status = 'A';
+                    }
+
+                    $baris['data'][] = $status ?? '';
                 }
 
                 $rekap[] = $baris;
@@ -169,8 +227,16 @@ class UserRekapController extends Controller
         }
 
         return view('user.rekap.index', compact(
-            'rekap', 'bulan', 'tahun', 'bulanAngka', 'listBulan', 'listTahun',
-            'mode', 'kategori', 'daysInMonth', 'hariMingguIndex'
+            'rekap',
+            'bulan',
+            'tahun',
+            'bulanAngka',
+            'listBulan',
+            'listTahun',
+            'mode',
+            'kategori',
+            'daysInMonth',
+            'hariMingguIndex'
         ));
     }
 }

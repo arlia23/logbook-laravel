@@ -13,7 +13,6 @@
 
 namespace App\Models{
 /**
- * @mixin IdeHelperCuti
  * @property int $id
  * @property int|null $user_id
  * @property string $nama_pegawai
@@ -25,6 +24,7 @@ namespace App\Models{
  * @property string $tgl_surat_cuti
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Cuti newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Cuti newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Cuti query()
@@ -69,7 +69,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * @mixin IdeHelperDinasLuar
  * @property int $id
  * @property int|null $user_id
  * @property string $nama_pegawai
@@ -83,6 +82,7 @@ namespace App\Models{
  * @property string|null $file_surat_tugas
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DinasLuar newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DinasLuar newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DinasLuar query()
@@ -105,7 +105,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * @mixin IdeHelperKehadiran
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Kehadiran newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Kehadiran newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Kehadiran query()
@@ -115,7 +114,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * @mixin IdeHelperLogbook
  * @property int $id
  * @property int $user_id
  * @property string $tanggal
@@ -146,17 +144,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * @mixin IdeHelperLokasiPresensi
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LokasiPresensi newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LokasiPresensi newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LokasiPresensi query()
- */
-	class LokasiPresensi extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * @mixin IdeHelperMonitoring
  * @property int $id
  * @property int $user_id
  * @property string $minggu_mulai
@@ -181,7 +168,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * @mixin IdeHelperPresensi
  * @property int $id
  * @property int $user_id
  * @property string $tanggal
@@ -208,7 +194,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * @mixin IdeHelperRekapKehadiran
  * @property int $id
  * @property int $user_id
  * @property int $bulan
@@ -245,7 +230,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * @mixin IdeHelperSakit
  * @property int $id
  * @property int|null $user_id
  * @property string $nama_pegawai
@@ -275,25 +259,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * @mixin IdeHelperUnitFakultas
- * @property int $id
- * @property string $nama
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UnitFakultas newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UnitFakultas newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UnitFakultas query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UnitFakultas whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UnitFakultas whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UnitFakultas whereNama($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UnitFakultas whereUpdatedAt($value)
- */
-	class UnitFakultas extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * @mixin IdeHelperUser
  * @property int $id
  * @property string $name
  * @property string $email
@@ -309,14 +274,12 @@ namespace App\Models{
  * @property string|null $contact_phone
  * @property string|null $email_address
  * @property string|null $tempat_lahir
- * @property \Illuminate\Support\Carbon|null $tanggal_lahir
+ * @property string|null $tanggal_lahir
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Logbook> $logbooks
  * @property-read int|null $logbooks_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Monitoring> $monitorings
- * @property-read int|null $monitorings_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Presensi> $presensis

@@ -24,9 +24,10 @@
     </div>
 </form>
 
-<table class="table table-bordered">
-    <thead>
+<table class="table table-bordered table-striped align-middle">
+    <thead class="table-light">
         <tr>
+            <th>No</th>
             <th>Nama User</th>
             <th>Tanggal</th>
             <th>Kegiatan</th>
@@ -34,34 +35,125 @@
             <th>Jam Masuk</th>
             <th>Jam Pulang</th>
             <th>Status</th>
-            <th>Aksi</th>
+            <th style="width: 150px;">Aksi</th>
         </tr>
     </thead>
     <tbody>
-        @forelse($logbooks as $logbook)
+    @forelse($logbooks as $index => $logbook)
         <tr>
+            <td>{{ $logbooks->firstItem() + $index }}</td>
             <td>{{ $logbook->user->name }}</td>
             <td>{{ $logbook->tanggal }}</td>
-            <td>{{ Str::limit($logbook->kegiatan, 50) }}</td>
-            <td>{{ $logbook->catatan_pekerjaan ?? '-' }}</td>
+            <td>
+                @if($logbook->kegiatan)
+                    <span class="badge bg-primary">{{ $logbook->kegiatan }}</span>
+                @else
+                    <span class="text-muted">-</span>
+                @endif
+            </td>
+
+            {{-- ===========================
+                 CATATAN PEKERJAAN
+            ============================ --}}
+            <td>
+                @php
+                    $catatan = $logbook->catatan_pekerjaan;
+                    $decoded = null;
+                    if ($catatan && is_string($catatan)) {
+                        $decoded = json_decode($catatan, true);
+                    }
+                @endphp
+
+                @if(is_array($decoded))
+                    <table class="table table-sm mb-0 custom-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 70%; padding: 6px 12px;">Catatan</th>
+                                <th style="width: 30%; padding: 6px 12px;" class="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($decoded as $item)
+                                <tr>
+                                    <td style="padding: 6px 12px;">{{ $item['kegiatan'] ?? '-' }}</td>
+                                    <td class="text-center" style="padding: 6px 12px;">
+                                        @if(isset($item['status']) && strtolower($item['status']) == 'selesai')
+                                            <span class="badge bg-success">Selesai</span>
+                                        @else
+                                            <span class="badge bg-warning text-dark">{{ $item['status'] ?? 'Belum' }}</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @elseif($catatan)
+                    <div style="padding: 4px 8px;">{{ $catatan }}</div>
+                @else
+                    <span class="text-muted">-</span>
+                @endif
+            </td>
+
             <td>{{ $logbook->jam_masuk }}</td>
             <td>{{ $logbook->jam_pulang }}</td>
-            <td>{{ $logbook->status }}</td>
             <td>
-                <a href="{{ route('admin.logbook.show', $logbook) }}" class="btn btn-info btn-sm">Detail</a>
-                <form action="{{ route('admin.logbook.destroy', $logbook) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus logbook?')">
-                    @csrf @method('DELETE')
-                    <button class="btn btn-danger btn-sm">Hapus</button>
-                </form>
+                @if(strtolower($logbook->status) == 'selesai')
+                    <span >Selesai</span>
+                @else
+                    <span >{{ ucfirst($logbook->status) }}</span>
+                @endif
+            </td>
+
+            <td>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('admin.logbook.show', $logbook) }}" class="btn btn-info btn-sm">
+                        <i class="bx bx-show"></i> Detail
+                    </a>
+                    <form action="{{ route('admin.logbook.destroy', $logbook) }}" method="POST"
+                          onsubmit="return confirm('Yakin hapus logbook ini?')">
+                        @csrf @method('DELETE')
+                        <button class="btn btn-danger btn-sm">
+                            <i class="bx bx-trash"></i> Hapus
+                        </button>
+                    </form>
+                </div>
             </td>
         </tr>
-        @empty
+    @empty
         <tr>
-            <td colspan="8" class="text-center">Belum ada logbook</td>
+            <td colspan="9" class="text-center text-muted">Belum ada logbook</td>
         </tr>
-        @endforelse
+    @endforelse
     </tbody>
 </table>
 
-{{ $logbooks->links() }}
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <div>
+        <p class="mb-0 text-muted small">
+            Menampilkan {{ $logbooks->firstItem() }} sampai {{ $logbooks->lastItem() }}
+            dari total {{ $logbooks->total() }} data
+        </p>
+    </div>
+    <div>
+        {{ $logbooks->onEachSide(1)->links('pagination::bootstrap-5') }}
+    </div>
+</div>
+
+{{-- Tambahkan CSS langsung di bawah --}}
+<style>
+    /* Hanya untuk tabel di dalam Catatan Pekerjaan */
+    .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    .custom-table th, .custom-table td {
+        border: none !important; /* Hilangkan semua garis */
+    }
+    .custom-table tr {
+        border-bottom: 1px solid #777676 !important; /* Garis horizontal tebal dan gelap */
+    }
+    .custom-table thead tr {
+        border-bottom: 1.5px solid #504f4f !important; /* Garis header lebih tebal */
+    }
+</style>
 @endsection

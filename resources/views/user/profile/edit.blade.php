@@ -82,9 +82,9 @@
                             value="{{ old('contact_phone', $user->contact_phone) }}">
                     </div>
 
-                    {{-- Email Lain --}}
+                    {{-- Email konfirm --}}
                     <div class="mb-3">
-                        <label for="email_address" class="form-label fw-bold">Email Lain</label>
+                        <label for="email_address" class="form-label fw-bold">Konfirmasi Email</label>
                         <input type="email" name="email_address" class="form-control"
                             value="{{ old('email_address', $user->email_address) }}">
                     </div>
@@ -102,14 +102,24 @@
                     </div>
 
                     {{-- Password --}}
+                    
                     <div class="mb-3">
-                        <label for="password" class="form-label fw-bold">Password Baru</label>
-                        <input type="password" name="password" class="form-control">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label for="password" class="form-label fw-bold">Password Baru</label>
+                            <small class="text-muted" style="color: red">*Kosongkan jika tidak ingin ganti password</small>
+                        </div>
+                        <input type="password" id="password" name="password" class="form-control">
                     </div>
+
+                    {{-- Konfirmasi Password --}}
                     <div class="mb-3">
-                        <label for="password_confirmation" class="form-label fw-bold">Konfirmasi Password</label>
-                        <input type="password" name="password_confirmation" class="form-control">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label for="password_confirmation" class="form-label fw-bold">Konfirmasi Password</label>
+                            <small class="text-muted " style="color: red">*Kosongkan jika tidak ingin ganti password</small>
+                        </div>
+                        <input type="password" id="password_confirmation" name="password_confirmation" class="form-control">
                     </div>
+
 
                     <button type="submit" class="btn btn-success">Simpan</button>
                     <a href="{{ route('user.profile.index') }}" class="btn btn-secondary">Batal</a>

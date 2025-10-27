@@ -1,20 +1,25 @@
 <!DOCTYPE html>
-<html lang="id" class="light-style layout-wide customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
+<html lang="id" class="light-style layout-wide customizer-hide" dir="ltr" data-theme="theme-default"
+    data-assets-path="../assets/" data-template="vertical-menu-template-free">
+
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <title>Logbook Digital - Sistem Absensi & Kegiatan Modern</title>
-    <meta name="description" content="Sistem logbook digital untuk pencatatan absensi dan kegiatan harian yang mudah dan efisien" />
-    
+    <meta name="description"
+        content="Sistem logbook digital untuk pencatatan absensi dan kegiatan harian yang mudah dan efisien" />
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.44.0/tabler-icons.min.css" />
-    
+
     <style>
         :root {
             --bs-primary: #696cff;
@@ -195,11 +200,11 @@
             .auth-buttons a {
                 color: white;
             }
-            
+
             .auth-buttons a:hover {
                 color: rgba(255, 255, 255, 0.8);
             }
-            
+
             .auth-buttons a:focus-visible {
                 outline-color: white;
             }
@@ -252,9 +257,17 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .hero-badge i {
@@ -326,6 +339,7 @@
                 transform: scale(0, 0);
                 opacity: 0.5;
             }
+
             100% {
                 transform: scale(20, 20);
                 opacity: 0;
@@ -407,9 +421,12 @@
         }
 
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0px) rotate(0deg);
             }
+
             50% {
                 transform: translateY(-20px) rotate(180deg);
             }
@@ -604,13 +621,18 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
             animation: rotate 20s linear infinite;
         }
 
         @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .cta-container {
@@ -736,24 +758,21 @@
             .navbar-nav {
                 display: none;
             }
-            
+
             .hero h1 {
                 font-size: 2.5rem;
             }
-            
-            .hero-buttons {
-                flex-direction: column;
-            }
-            
+
+
             .stats {
                 margin-top: -40px;
                 padding: 2rem 1rem;
             }
-            
+
             .section-title {
                 font-size: 2rem;
             }
-            
+
             .scroll-to-top {
                 bottom: 1rem;
                 right: 1rem;
@@ -796,12 +815,15 @@
                 transform: translateY(0) translateX(0) rotate(0deg);
                 opacity: 0;
             }
+
             10% {
                 opacity: 1;
             }
+
             90% {
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(-100vh) translateX(100px) rotate(360deg);
                 opacity: 0;
@@ -816,23 +838,25 @@
         <div class="navbar-container">
             <a href="#" class="navbar-brand">
                 <i class="ti ti-clipboard-check"></i>
-                LogBook Pro
+                LogBook Perpustakaan
             </a>
-            
+
             <ul class="navbar-nav">
                 <li><a href="#home">Beranda</a></li>
                 <li><a href="#features">Fitur</a></li>
                 <li><a href="#about">Tentang</a></li>
                 <li><a href="#contact">Kontak</a></li>
             </ul>
-            
+
             <!-- Auth buttons sesuai format Laravel Anda -->
             <div class="auth-buttons">
-                <a href="{{ route('login') }}" class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
+                <a href="{{ route('login') }}"
+                    class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
                     Log in
                 </a>
 
-                <a href="{{ route('register') }}" class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
+                <a href="{{ route('register') }}"
+                    class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
                     Register
                 </a>
             </div>
@@ -849,61 +873,55 @@
             <i class="ti ti-chart-bar shape shape-4"></i>
             <i class="ti ti-bell shape shape-5"></i>
         </div>
-        
+
         <div class="hero-container">
             <div class="hero-content">
                 <div class="hero-badge">
                     <i class="ti ti-check-circle"></i>
                     Sistem Absensi & Kegiatan Terpercaya
                 </div>
-                
+
                 <h1 class="fade-in-up">LogBook Digital untuk Absensi & Kegiatan Harian</h1>
-                
+
                 <p class="fade-in-up" style="animation-delay: 0.2s;">
-                    Kelola absensi karyawan dan catat kegiatan harian dengan mudah. 
+                    Kelola absensi karyawan dan catat kegiatan harian dengan mudah.
                     Sistem logbook modern yang memudahkan pencatatan waktu kerja dan aktivitas tim.
                 </p>
-                
-                <div class="hero-buttons fade-in-up" style="animation-delay: 0.4s;">
-                    <a href="#features" class="btn btn-white">
-                        <i class="ti ti-eye"></i>
-                        Lihat Fitur
-                    </a>
-                    <a href="#demo" class="btn btn-outline-white">
-                        <i class="ti ti-device-desktop"></i>
-                        Demo Gratis
-                    </a>
-                </div>
+
+
             </div>
         </div>
     </section>
 
     <!-- Statistics -->
-    <div class="stats">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-icon">
-                    <i class="ti ti-users"></i>
-                </div>
-                <div class="stat-number" data-count="2500">0</div>
-                <div class="stat-label">Pengguna Aktif</div>
+   <div class="stats">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-icon">
+                <img style="width: 75px" src="{{ asset('template/img/icons/orang.png') }}" alt="Orang" />
             </div>
-            <div class="stat-item">
-                <div class="stat-icon">
-                    <i class="ti ti-calendar-check"></i>
-                </div>
-                <div class="stat-number" data-count="15000">0</div>
-                <div class="stat-label">Absensi Bulan Ini</div>
+            <div class="stat-number">{{ $jumlahKaryawan }}</div>
+            <div class="stat-label">Jumlah Karyawan</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-icon">
+                <img style="width: 75px" src="{{ asset('template/img/icons/logbook.png') }}" alt="Logbook" />
             </div>
-            <div class="stat-item">
-                <div class="stat-icon">
-                    <i class="ti ti-clipboard-list"></i>
-                </div>
-                <div class="stat-number" data-count="8500">0</div>
-                <div class="stat-label">Kegiatan Tercatat</div>
+            <div class="stat-number">{{ $jumlahLogbook }}</div>
+            <div class="stat-label">Pengisian Logbook</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-icon">
+                <img style="width: 75px" src="{{ asset('template/img/icons/hadir.png') }}" alt="Hadir" />
             </div>
+            <div class="stat-number">{{ $jumlahHadirHariIni }}</div>
+            <div class="stat-label">Kehadiran Hari Ini</div>
         </div>
     </div>
+</div>
+
 
     <!-- Features -->
     <section class="features" id="features">
@@ -915,7 +933,8 @@
                 </div>
                 <h2 class="section-title">Solusi Lengkap untuk Manajemen Kehadiran</h2>
                 <p class="section-description">
-                    Dapatkan kontrol penuh atas absensi dan kegiatan tim dengan fitur-fitur canggih yang mudah digunakan.
+                    Dapatkan kontrol penuh atas absensi dan kegiatan tim dengan fitur-fitur canggih yang mudah
+                    digunakan.
                 </p>
             </div>
 
@@ -925,7 +944,8 @@
                         <i class="ti ti-fingerprint"></i>
                     </div>
                     <h3>Absensi Digital</h3>
-                    <p>Catat kehadiran dengan mudah menggunakan sistem clock-in/out digital. Terintegrasi dengan GPS untuk validasi lokasi kerja.</p>
+                    <p>Catat kehadiran dengan mudah menggunakan sistem clock-in/out digital. Terintegrasi dengan GPS
+                        untuk validasi lokasi kerja.</p>
                 </div>
 
                 <div class="feature-card">
@@ -933,7 +953,8 @@
                         <i class="ti ti-notebook"></i>
                     </div>
                     <h3>Pencatatan Kegiatan</h3>
-                    <p>Dokumentasikan semua aktivitas harian dengan detail. Kategori kegiatan yang dapat disesuaikan sesuai kebutuhan organisasi.</p>
+                    <p>Dokumentasikan semua aktivitas harian dengan detail. Kategori kegiatan yang dapat disesuaikan
+                        sesuai kebutuhan organisasi.</p>
                 </div>
 
                 <div class="feature-card">
@@ -941,7 +962,8 @@
                         <i class="ti ti-chart-bar"></i>
                     </div>
                     <h3>Laporan Real-time</h3>
-                    <p>Dashboard analitik memberikan insight mendalam tentang produktivitas dan kehadiran tim dalam bentuk grafik yang mudah dipahami.</p>
+                    <p>Dashboard analitik memberikan insight mendalam tentang produktivitas dan kehadiran tim dalam
+                        bentuk grafik yang mudah dipahami.</p>
                 </div>
 
                 <div class="feature-card">
@@ -949,7 +971,8 @@
                         <i class="ti ti-calendar-time"></i>
                     </div>
                     <h3>Manajemen Jadwal</h3>
-                    <p>Atur jadwal kerja fleksibel, shift karyawan, dan jadwal kegiatan dengan kalender terintegrasi yang user-friendly.</p>
+                    <p>Atur jadwal kerja fleksibel, shift karyawan, dan jadwal kegiatan dengan kalender terintegrasi
+                        yang user-friendly.</p>
                 </div>
 
                 <div class="feature-card">
@@ -957,7 +980,8 @@
                         <i class="ti ti-bell"></i>
                     </div>
                     <h3>Notifikasi Cerdas</h3>
-                    <p>Dapatkan pengingat otomatis untuk absensi, deadline kegiatan, dan notifikasi penting lainnya melalui email atau push notification.</p>
+                    <p>Dapatkan pengingat otomatis untuk absensi, deadline kegiatan, dan notifikasi penting lainnya
+                        melalui email atau push notification.</p>
                 </div>
 
                 <div class="feature-card">
@@ -965,7 +989,8 @@
                         <i class="ti ti-shield-lock"></i>
                     </div>
                     <h3>Keamanan Data</h3>
-                    <p>Sistem keamanan berlapis melindungi data sensitif dengan enkripsi tingkat enterprise dan backup otomatis setiap hari.</p>
+                    <p>Sistem keamanan berlapis melindungi data sensitif dengan enkripsi tingkat enterprise dan backup
+                        otomatis setiap hari.</p>
                 </div>
             </div>
         </div>
@@ -994,7 +1019,8 @@
         <div class="footer-container">
             <div class="footer-section">
                 <h4>LogBook Pro</h4>
-                <p>Solusi terdepan untuk manajemen absensi dan pencatatan kegiatan harian yang efisien dan mudah digunakan.</p>
+                <p>Solusi terdepan untuk manajemen absensi dan pencatatan kegiatan harian yang efisien dan mudah
+                    digunakan.</p>
             </div>
             <div class="footer-section">
                 <h4>Fitur</h4>
@@ -1039,13 +1065,13 @@
         window.addEventListener('scroll', function() {
             const navbar = document.getElementById('navbar');
             const scrollToTop = document.getElementById('scrollToTop');
-            
+
             if (window.scrollY > 50) {
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
             }
-            
+
             // Show/hide scroll to top button
             if (window.scrollY > 300) {
                 scrollToTop.classList.add('show');
@@ -1056,7 +1082,7 @@
 
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
@@ -1096,27 +1122,27 @@
         function createParticles() {
             const container = document.getElementById('particles');
             const particleCount = 30;
-            
+
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
-                
+
                 // Random size
                 const size = Math.random() * 5 + 2;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
-                
+
                 // Random position
                 particle.style.left = `${Math.random() * 100}%`;
                 particle.style.top = `${Math.random() * 100}%`;
-                
+
                 // Random animation duration
                 const duration = Math.random() * 20 + 10;
                 particle.style.animationDuration = `${duration}s`;
-                
+
                 // Random delay
                 particle.style.animationDelay = `${Math.random() * 5}s`;
-                
+
                 container.appendChild(particle);
             }
         }
@@ -1144,7 +1170,7 @@
                             element.style.transform = 'translateY(0)';
                         }, index * 100);
                     });
-                    
+
                     observer.unobserve(entry.target);
                 }
             });
@@ -1154,7 +1180,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Create particles
             createParticles();
-            
+
             // Observe elements
             observer.observe(document.querySelector('.stats'));
             observer.observe(document.querySelector('.features'));
@@ -1173,14 +1199,14 @@
                 const rect = this.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
+
                 const ripple = document.createElement('span');
                 ripple.style.left = `${x}px`;
                 ripple.style.top = `${y}px`;
                 ripple.classList.add('ripple-effect');
-                
+
                 this.appendChild(ripple);
-                
+
                 setTimeout(() => {
                     ripple.remove();
                 }, 600);
@@ -1188,4 +1214,5 @@
         });
     </script>
 </body>
+
 </html>

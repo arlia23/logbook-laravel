@@ -3,7 +3,14 @@
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
-        <a href="{{ route('index.home') }}" class="app-brand-link">
+        {{-- Link dashboard menyesuaikan role --}}
+        @if(Auth::user()->role == 'admin')
+            <a href="{{ route('admin.home') }}" class="app-brand-link">
+        @elseif(Auth::user()->role == 'user')
+            <a href="{{ route('user.home') }}" class="app-brand-link">
+        @else
+            <a href="#" class="app-brand-link">
+        @endif
             <span class="app-brand-logo demo">
                 <span class="text-primary">
                     {{-- Logo SVG kamu --}}

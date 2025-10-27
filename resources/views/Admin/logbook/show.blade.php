@@ -5,7 +5,7 @@
 
     <table class="table table-bordered">
         <tr>
-            <th>Nama User</th>
+            <th style="width: 200px;">Nama User</th>
             <td>{{ $logbook->user->name }}</td>
         </tr>
         <tr>
@@ -14,11 +14,41 @@
         </tr>
         <tr>
             <th>Kegiatan</th>
-            <td>{{ $logbook->kegiatan }}</td>
+            <td>{{ $logbook->kegiatan ?? '-' }}</td>
         </tr>
         <tr>
             <th>Catatan Pekerjaan</th>
-            <td>{{ $logbook->catatan_pekerjaan ?? '-' }}</td>
+            <td>
+                @php
+                    $catatan = $logbook->catatan_pekerjaan;
+                    $decoded = null;
+                    if ($catatan && is_string($catatan)) {
+                        $decoded = json_decode($catatan, true);
+                    }
+                @endphp
+
+                @if(is_array($decoded))
+                    <div class="border rounded p-2" style="background-color: #fafafa;">
+                        <ul class="list-unstyled mb-0">
+                            @foreach($decoded as $item)
+                                <li class="d-flex justify-content-between align-items-center border-bottom py-1">
+                                    <span>{{ $item['kegiatan'] ?? '-' }}</span>
+                                    @if(isset($item['status']) && strtolower($item['status']) == 'selesai')
+                                        <span class="badge bg-success">{{ ucfirst($item['status']) }}</span>
+                                    @else
+                                        <span class="badge bg-warning text-dark">{{ $item['status'] ?? 'Belum' }}</span>
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @elseif($catatan)
+                    {{-- Jika bukan JSON --}}
+                    <div class="p-2">{{ $catatan }}</div>
+                @else
+                    <span class="text-muted">-</span>
+                @endif
+            </td>
         </tr>
         <tr>
             <th>Jam Masuk</th>
@@ -30,7 +60,13 @@
         </tr>
         <tr>
             <th>Status</th>
-            <td>{{ $logbook->status }}</td>
+            <td>
+                @if(strtolower($logbook->status) == 'selesai')
+                    <span class="badge bg-success">Selesai</span>
+                @else
+                    <span class="badge bg-secondary">{{ ucfirst($logbook->status) }}</span>
+                @endif
+            </td>
         </tr>
     </table>
 

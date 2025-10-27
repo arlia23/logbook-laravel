@@ -17,6 +17,7 @@ class Sakit extends Model
 
     // Kolom yang boleh diisi (mass assignment)
     protected $fillable = [
+        'user_id',
         'nama_pegawai',
         'keterangan',
         'tgl_mulai',

@@ -1,72 +1,111 @@
 @extends('template.index')
-@section('title', 'Rekap Kehadiran')
 
 @section('main')
-<div class="container">
-    <h4 class="mb-3">📊 Rekap Kehadiran Bulan {{ $bulan }} - {{ $tahun }}</h4>
+<div class="container p-3">
+    {{-- 🔹 Judul --}}
+    <div class="mb-4 text-center">
+        <h3 class="fw-bold">
+            {{ ucfirst($mode) }} Kehadiran Bulan {{ $bulan }} Tahun {{ $tahun }}
+            @if($kategori) ({{ strtoupper($kategori) }}) @endif
+        </h3>
+    </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    {{-- 🔹 Filter --}}
+    <div class="mb-4">
+        <form method="GET" action="{{ route('admin.rekap.index') }}" class="d-flex flex-wrap gap-2 align-items-center justify-content-center">
+            <select name="mode" class="form-select" style="width:160px;">
+                <option value="rekap" {{ $mode == 'rekap' ? 'selected' : '' }}>Rekapitulasi</option>
+                <option value="detail" {{ $mode == 'detail' ? 'selected' : '' }}>Detail</option>
+            </select>
 
-    <form class="row g-2 mb-3">
-        <div class="col-auto">
-            <input type="number" name="bulan" class="form-control" value="{{ $bulan }}" min="1" max="12">
-        </div>
-        <div class="col-auto">
-            <input type="number" name="tahun" class="form-control" value="{{ $tahun }}" min="2020" max="{{ date('Y') }}">
-        </div>
-        <div class="col-auto">
-            <button class="btn btn-primary">Filter</button>
-        </div>
-        <div class="col-auto">
-            <form action="{{ route('admin.rekap.generate') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-success">Generate Rekap</button>
-            </form>
-        </div>
-    </form>
+            <select name="kategori" class="form-select" style="width:160px;">
+                <option value="">Semua</option>
+                <option value="pns" {{ $kategori == 'pns' ? 'selected' : '' }}>PNS</option>
+                <option value="phl" {{ $kategori == 'phl' ? 'selected' : '' }}>PHL</option>
+                <option value="p3k" {{ $kategori == 'p3k' ? 'selected' : '' }}>P3K</option>
+            </select>
 
-    <div class="card shadow">
-        <div class="card-body">
-            <table class="table table-bordered">
-                <thead>
+            <select name="bulan" class="form-select" style="width:180px;">
+                @foreach($listBulan as $key => $nama)
+                    <option value="{{ $key }}" {{ ($bulanAngka == $key) ? 'selected' : '' }}>{{ $nama }}</option>
+                @endforeach
+            </select>
+
+            <select name="tahun" class="form-select" style="width:120px;">
+                @foreach($listTahun as $th)
+                    <option value="{{ $th }}" {{ ($tahun == $th) ? 'selected' : '' }}>{{ $th }}</option>
+                @endforeach
+            </select>
+
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+    </div>
+
+    {{-- 🔹 Tombol Export --}}
+    <div class="mb-3 text-end">
+        <a href="{{ route('admin.rekap.export', [
+            'mode' => $mode,
+            'kategori' => $kategori,
+            'bulan' => $bulanAngka,
+            'tahun' => $tahun
+        ]) }}" class="btn btn-success">
+            Export Excel
+        </a>
+    </div>
+
+    {{-- 🔹 Tabel Data --}}
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped mb-0 text-center">
+                <thead class="table-light">
                     <tr>
-                        <th>Nama</th>
-                        <th>Hadir</th>
-                        <th>DL</th>
-                        <th>Cuti</th>
-                        <th>Sakit</th>
-                        <th>Alpha</th>
-                        <th>Aksi</th>
+                        <th>Nama Pegawai</th>
+                        @if($mode == 'rekap')
+                            <th>HK</th><th>Hadir</th><th>DL</th><th>Cuti</th>
+                            <th>Sakit</th><th>Alpha</th><th>WFO</th><th>WFH</th>
+                        @else
+                            @for($i = 1; $i <= $daysInMonth; $i++)
+                                @php
+                                    $tanggal = sprintf('%04d-%02d-%02d', $tahun, $bulanAngka, $i);
+                                    $isSunday = date('N', strtotime($tanggal)) == 7;
+                                @endphp
+                                <th @if($isSunday) style="background-color: #e0f2ff;" @endif>{{ $i }}</th>
+                            @endfor
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($rekap as $r)
-                    <tr>
-                        <td>{{ $r->user->name }}</td>
-                        <td>{{ $r->jumlah_hadir }}</td>
-                        <td>{{ $r->jumlah_dinas_luar }}</td>
-                        <td>{{ $r->jumlah_cuti }}</td>
-                        <td>{{ $r->jumlah_sakit }}</td>
-                        <td>{{ $r->jumlah_alpha }}</td>
-                        <td>
-                            <a href="{{ route('admin.rekap.show', $r->id) }}" class="btn btn-sm btn-primary">
-                                Detail
-                            </a>
-                        </td>
-                    </tr>
+                        @if($mode == 'rekap')
+                            <tr>
+                                <td class="text-start ps-3">{{ $r->name }}</td>
+                                <td>{{ $r->hk }}</td>
+                                <td>{{ $r->hadir }}</td>
+                                <td>{{ $r->dl }}</td>
+                                <td>{{ $r->cuti }}</td>
+                                <td>{{ $r->sakit }}</td>
+                                <td>{{ $r->alpha }}</td>
+                                <td>{{ $r->wfo }}</td>
+                                <td>{{ $r->wfh }}</td>
+                            </tr>
+                        @else
+                            <tr>
+                                <td class="text-start ps-3">{{ $r['name'] }}</td>
+                                @foreach($r['data'] as $index => $status)
+                                    @php $isSunday = in_array($index, $hariMingguIndex ?? []); @endphp
+                                    <td @if($isSunday) style="background-color: #e0f2ff;" @endif>
+                                        {{ $status }}
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endif
                     @empty
-                    <tr>
-                        <td colspan="7" class="text-center">Belum ada data rekap</td>
-                    </tr>
+                        <tr>
+                            <td colspan="{{ $mode == 'rekap' ? 9 : ($daysInMonth + 1) }}">Belum ada data untuk periode ini.</td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
-
-            <div class="mt-3">
-                {{ $rekap->links() }}
-            </div>
         </div>
     </div>
 </div>

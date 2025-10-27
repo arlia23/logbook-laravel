@@ -34,7 +34,7 @@
             <div class="col">
               <label class="form-label">Tgl Mulai</label>
               <input type="date" name="tgl_mulai" class="form-control"
-                     value="{{ $cuti->tgl_mulai }}" required>
+                     value="{{ $cuti->tgl_mulai }}" readonly>
             </div>
             <div class="col">
               <label class="form-label">Tgl Selesai</label>

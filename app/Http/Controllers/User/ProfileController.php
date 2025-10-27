@@ -40,7 +40,7 @@ class ProfileController extends Controller
             'jabatan'          => 'nullable|string|max:255',
             'lokasi_presensi'  => 'nullable|string|max:255',
             'contact_phone'    => 'nullable|string|max:50',
-            'email_address'    => 'nullable|email|max:255',
+            'email_konfirm'    => 'nullable|email|max:255',
             'tempat_lahir'     => 'nullable|string|max:255',
             'tanggal_lahir'    => 'nullable|date',
         ]);
@@ -54,7 +54,7 @@ class ProfileController extends Controller
             'jabatan',
             'lokasi_presensi',
             'contact_phone',
-            'email_address',
+            'email_konfirm',
             'tempat_lahir',
             'tanggal_lahir',
         ]));
