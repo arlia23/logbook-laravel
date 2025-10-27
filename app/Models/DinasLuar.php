@@ -14,6 +14,7 @@ class DinasLuar extends Model
 
     // Kolom yang bisa diisi secara mass-assignment
     protected $fillable = [
+        'user_id',
         'nama_pegawai',
         'nama_kegiatan',
         'lokasi_kegiatan',
@@ -24,4 +25,9 @@ class DinasLuar extends Model
         'jenis_tugas',
         'file_surat_tugas',
     ];
+
+     public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

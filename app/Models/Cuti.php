@@ -9,11 +9,9 @@ class Cuti extends Model
 {
     use HasFactory;
 
-    // Nama tabel secara eksplisit (karena bukan jamak)
-    protected $table = 'cuti';
-
-    // Kolom yang boleh diisi (mass assignment)
+    protected $table = 'cuti'; // sesuaikan nama tabelmu
     protected $fillable = [
+        'user_id',
         'nama_pegawai',
         'jenis_cuti',
         'keterangan',
@@ -22,4 +20,11 @@ class Cuti extends Model
         'no_surat_cuti',
         'tgl_surat_cuti',
     ];
+
+    protected $dates = ['tgl_mulai','tgl_selesai','tgl_surat_cuti'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

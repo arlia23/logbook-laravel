@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('sakit', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable(); // relasi ke users
+            $table->string('nama_pegawai');
+            $table->text('keterangan');
+            $table->date('tgl_mulai');
+            $table->date('tgl_selesai');
+            $table->string('no_surat_ket_sakit');
+            $table->date('tgl_surat_ket_sakit');
             $table->timestamps();
+
+            // kalau mau relasi foreign key ke users
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -13,6 +13,24 @@ return new class extends Migration
     {
         Schema::create('dinas_luar', function (Blueprint $table) {
             $table->id();
+
+            // relasi ke users (nullable karena di data lama ada NULL)
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->string('nama_pegawai');
+            $table->string('nama_kegiatan');
+            $table->string('lokasi_kegiatan');
+
+            $table->date('tgl_mulai')->nullable();
+            $table->date('tgl_selesai')->nullable();
+
+            $table->string('no_surat_tugas')->nullable();
+            $table->date('tgl_surat_tugas')->nullable();
+
+            $table->string('jenis_tugas')->nullable();
+            $table->string('file_surat_tugas')->nullable();
+
             $table->timestamps();
         });
     }

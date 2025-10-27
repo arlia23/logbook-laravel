@@ -16,14 +16,23 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
+     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
         'tipe_user',
+        'nip',
+        'unit_fakultas',
+        'jabatan',
+        'lokasi_presensi',
+        'contact_phone',
+        'email_address',
+        'tempat_lahir',
+        'tanggal_lahir',
     ];
 
+   
     public function logbooks()
     {
         return $this->hasMany(Logbook::class);
@@ -32,11 +41,6 @@ class User extends Authenticatable
     public function presensis()
     {
         return $this->hasMany(Presensi::class);
-    }
-
-    public function tidakHadirs()
-    {
-        return $this->hasMany(TidakHadir::class);
     }
 
     public function rekapKehadirans()
