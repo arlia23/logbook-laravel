@@ -95,11 +95,16 @@
                         <input type="text" name="tempat_lahir" class="form-control"
                             value="{{ old('tempat_lahir', $user->tempat_lahir) }}">
                     </div>
-                    <div class="mb-3">
-                        <label for="tanggal_lahir" class="form-label fw-bold">Tanggal Lahir</label>
-                        <input type="date" name="tanggal_lahir" class="form-control"
-                            value="{{ old('tanggal_lahir', $user->tanggal_lahir) }}">
-                    </div>
+                    {{-- Tanggal Lahir --}}
+<div class="mb-3">
+    <label for="tanggal_lahir" class="form-label fw-bold">Tanggal Lahir</label>
+    <div class="input-group">
+        <input type="text" id="tanggal_lahir" name="tanggal_lahir" class="form-control"
+            value="{{ old('tanggal_lahir', $user->tanggal_lahir ? \Carbon\Carbon::parse($user->tanggal_lahir)->format('Y-m-d') : '') }}"
+            placeholder="Pilih tanggal lahir" autocomplete="off">
+        <span class="input-group-text"><i class="bx bx-calendar"></i></span>
+    </div>
+</div>
 
                     {{-- Password --}}
                     
@@ -128,3 +133,26 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    {{-- Bootstrap Datepicker --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/locales/bootstrap-datepicker.id.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            $('#tanggal_lahir').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true,
+                orientation: "bottom auto",
+                language: 'id',
+                startView: 2,      // langsung buka tampilan tahun
+                minViewMode: 0,    // tampil mode bulan dan tanggal juga
+                startDate: new Date(1950, 0, 1), // mulai dari tahun 1950
+                endDate: new Date() // sampai tahun ini
+            });
+        });
+    </script>
+@endpush
+

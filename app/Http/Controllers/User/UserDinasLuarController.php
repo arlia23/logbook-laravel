@@ -38,7 +38,7 @@ class UserDinasLuarController extends Controller
         $start = Carbon::parse($request->tgl_mulai);
         $end   = Carbon::parse($request->tgl_selesai);
 
-        // 🚨 Cek overlap
+        // 🚨 Cek overlap dinas luar sebelumnya
         $adaDL = DinasLuar::where('user_id', Auth::id())
             ->where(function ($q) use ($start, $end) {
                 $q->whereBetween('tgl_mulai', [$start, $end])
@@ -54,20 +54,30 @@ class UserDinasLuarController extends Controller
             return back()->withErrors(['tgl_mulai' => "Kamu sudah mengisi Dinas Luar pada periode tersebut."]);
         }
 
-        // 🚨 Cek tabrakan presensi
+        // 🚨 Cek tabrakan presensi (boleh update kalau status = A)
         for ($date = $start->copy(); $date->lte($end); $date->addDay()) {
             if ($date->isSunday()) continue;
 
-            $exists = DetailKehadiran::where('user_id', Auth::id())
+            $detail = DetailKehadiran::where('user_id', Auth::id())
                 ->where('tanggal', $date->format('Y-m-d'))
-                ->exists();
+                ->first();
 
-            if ($exists) {
-                return back()->withErrors(['tgl_mulai' => "Tanggal {$date->format('d-m-Y')} sudah memiliki status lain."]);
+            // ❌ Jika sudah ada status lain selain A, tolak
+            if ($detail && in_array($detail->status, ['H', 'C', 'S'])) {
+                return back()->withErrors([
+                    'tgl_mulai' => "Tanggal {$date->format('d-m-Y')} sudah diisi dengan status {$detail->status}."
+                ]);
+            }
+
+            // ❌ Jika ada data tapi bukan A, juga tolak
+            if ($detail && $detail->status != 'A') {
+                return back()->withErrors([
+                    'tgl_mulai' => "Tanggal {$date->format('d-m-Y')} sudah memiliki status lain ({$detail->status})."
+                ]);
             }
         }
 
-        // ✅ Simpan data
+        // ✅ Simpan data dinas luar
         $dinasLuar = new DinasLuar();
         $dinasLuar->user_id         = Auth::id();
         $dinasLuar->nama_pegawai    = Auth::user()->name;
@@ -86,7 +96,7 @@ class UserDinasLuarController extends Controller
 
         $dinasLuar->save();
 
-        // ✅ Simpan detail
+        // ✅ Simpan ke tabel detail_kehadirans
         $this->saveDetailKehadiran($request->tgl_mulai, $request->tgl_selesai, 'DL');
 
         return redirect()->route('user.dinas.index')->with('success', 'Data dinas luar berhasil ditambahkan');
@@ -127,13 +137,13 @@ class UserDinasLuarController extends Controller
 
         $dinasLuar->save();
 
-        // Hapus detail lama
+        // 🧹 Hapus detail DL lama
         DetailKehadiran::where('user_id', Auth::id())
             ->whereBetween('tanggal', [$dinasLuar->tgl_mulai, $dinasLuar->tgl_selesai])
             ->where('status', 'DL')
             ->delete();
 
-        // Simpan ulang
+        // ✅ Simpan ulang
         $this->saveDetailKehadiran($dinasLuar->tgl_mulai, $request->tgl_selesai, 'DL');
 
         return redirect()->route('user.dinas.index')->with('success', 'Data dinas luar berhasil diperbarui');

@@ -49,9 +49,9 @@
       </div>
   </div>
 
-  <div class="table-responsive text-nowrap">
-      <table class="table table-hover align-middle">
-          <thead class="table-light">
+  <div class="table-responsive text-nowrap" >
+      <table class="table table-hover align-middle" >
+          <thead style="background-color: #cfcff5; color: #fbfafa;">
               <tr>
                   <th>No</th>
                   <th>Tanggal</th>

@@ -141,3 +141,24 @@
 
 
 </html>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const togglePassword = document.querySelectorAll('.form-password-toggle .input-group-text');
+
+    togglePassword.forEach(function(el) {
+      el.addEventListener('click', function() {
+        const input = this.previousElementSibling; // ambil input sebelum span
+        if (input.type === "password") {
+          input.type = "text";
+          this.querySelector('i').classList.remove('bx-hide');
+          this.querySelector('i').classList.add('bx-show');
+        } else {
+          input.type = "password";
+          this.querySelector('i').classList.remove('bx-show');
+          this.querySelector('i').classList.add('bx-hide');
+        }
+      });
+    });
+  });
+</script>
+

@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('cuti', function (Blueprint $table) {
             $table->id();
+
+            // 🔗 relasi ke tabel users
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+
             $table->string('nama_pegawai');
             $table->enum('jenis_cuti', [
                 'Cuti Tahunan',
@@ -20,11 +24,11 @@ return new class extends Migration
                 'Cuti Melahirkan',
                 'Cuti Sakit'
             ]);
-            $table->text('keterangan');
+            $table->text('keterangan')->nullable();
             $table->date('tgl_mulai');
             $table->date('tgl_selesai');
-            $table->string('no_surat_cuti');
-            $table->date('tgl_surat_cuti');
+            $table->string('no_surat_cuti')->nullable();
+            $table->date('tgl_surat_cuti')->nullable();
             $table->timestamps();
         });
     }

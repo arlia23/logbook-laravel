@@ -13,26 +13,42 @@ class MonitoringController extends Controller
 {
     public function index(Request $request)
     {
-        $startOfWeek = Carbon::now()->startOfWeek(); 
+        // Tentukan minggu yang ditampilkan
+        $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek   = Carbon::now()->endOfWeek();
 
-        if ($request->has(['start', 'end'])) {
+        if ($request->has(['start', 'end']) && $request->start && $request->end) {
             $startOfWeek = Carbon::parse($request->start);
             $endOfWeek   = Carbon::parse($request->end);
         }
 
-        $users = User::all();
+        // 🔍 Ambil input pencarian
+        $search = $request->input('search');
+
+        // ✅ Ambil hanya user dengan role 'user'
+        $users = User::where('role', 'user')
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->orderBy('name', 'asc')
+            ->get();
+
         $data = [];
 
         foreach ($users as $user) {
+            // Ambil logbook per user dalam rentang minggu
             $logbooks = Logbook::where('user_id', $user->id)
                 ->whereBetween('tanggal', [$startOfWeek, $endOfWeek])
                 ->pluck('catatan_pekerjaan')
                 ->filter()
                 ->toArray();
 
-            $ringkasan = implode("\n- ", $logbooks);
+            // Gabungkan catatan pekerjaan
+            $ringkasan = count($logbooks)
+                ? '- ' . implode("\n- ", $logbooks)
+                : null;
 
+            // Ambil data monitoring mingguan
             $monitoring = Monitoring::where('user_id', $user->id)
                 ->whereDate('minggu_mulai', $startOfWeek)
                 ->whereDate('minggu_selesai', $endOfWeek)
@@ -41,6 +57,7 @@ class MonitoringController extends Controller
             $data[] = [
                 'user'                => $user,
                 'ringkasan_pekerjaan' => $ringkasan,
+                'laporan'             => $monitoring?->laporan, // ✅ tambahkan ini
                 'catatan_supervisor'  => $monitoring?->catatan_supervisor,
                 'id'                  => $monitoring?->id,
                 'minggu_mulai'        => $startOfWeek->toDateString(),
@@ -62,8 +79,8 @@ class MonitoringController extends Controller
 
         Monitoring::updateOrCreate(
             [
-                'user_id'      => $request->user_id,
-                'minggu_mulai' => $request->minggu_mulai,
+                'user_id'        => $request->user_id,
+                'minggu_mulai'   => $request->minggu_mulai,
                 'minggu_selesai' => $request->minggu_selesai,
             ],
             [
@@ -77,8 +94,8 @@ class MonitoringController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'id'                => 'required|exists:monitorings,id',
-            'catatan_supervisor'=> 'required|string',
+            'id'                 => 'required|exists:monitorings,id',
+            'catatan_supervisor' => 'required|string',
         ]);
 
         $monitoring = Monitoring::findOrFail($request->id);

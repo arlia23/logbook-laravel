@@ -14,8 +14,7 @@ class AddProfileFieldsToUsersTable extends Migration
             $table->string('jabatan')->nullable()->after('unit_fakultas');
             $table->string('lokasi_presensi')->nullable()->after('jabatan');
             $table->string('contact_phone')->nullable()->after('lokasi_presensi');
-            $table->string('email_address')->nullable()->after('contact_phone');
-            $table->string('tempat_lahir')->nullable()->after('email_address');
+            $table->string('tempat_lahir')->nullable()->after('contact_phone');
             $table->date('tanggal_lahir')->nullable()->after('tempat_lahir');
         });
     }
@@ -28,8 +27,6 @@ class AddProfileFieldsToUsersTable extends Migration
                 'unit_fakultas',
                 'jabatan',
                 'lokasi_presensi',
-                'contact_phone',
-                'email_address',
                 'tempat_lahir',
                 'tanggal_lahir',
             ]);

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('content')
 <div class="container">
@@ -44,4 +44,68 @@
         </div>
     </div>
 </div>
+@endsection --}}
+
+@extends('layouts.auth') {{-- gunakan layout Sneat seperti login --}}
+
+@section('title', 'Lupa Password')
+
+@section('content')
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner py-4">
+            <!-- Forgot Password Card -->
+            <div class="card">
+                <div class="card-body">
+                    <!-- Logo -->
+                    <div class="app-brand justify-content-center mb-4">
+                            <span class="app-brand-text demo text-body fw-bold">📋 Logbook</span>
+                    </div>
+
+                    <h4 class="mb-2 text-center">Lupa Password? 🔑</h4>
+                    <p class="mb-4 text-center">Masukkan email Anda, kami akan kirim tautan untuk reset password.</p>
+
+                    @if (session('status'))
+                        <div class="alert alert-success text-center" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('password.email') }}">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                class="form-control @error('email') is-invalid @enderror" 
+                                value="{{ old('email') }}" 
+                                required 
+                                autofocus
+                                placeholder="Masukkan email Anda"
+                            >
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <button type="submit" class="btn btn-primary d-grid w-100">
+                            Kirim Tautan Reset Password
+                        </button>
+                    </form>
+
+                    <p class="text-center mt-3">
+                        <a href="{{ route('login') }}">
+                            <i class="bx bx-chevron-left scaleX-n1-rtl"></i> Kembali ke Login
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <!-- /Forgot Password Card -->
+        </div>
+    </div>
+</div>
 @endsection
+

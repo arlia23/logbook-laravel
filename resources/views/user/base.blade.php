@@ -30,94 +30,95 @@
             {{-- Grafik Order & Income --}}
             <div class="row">
                 <!-- Persentase Laporan -->
-                <div class="col-md-6 mb-6">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="card-header text-center">
-                            <h5 class="mb-1 fw-semibold ">Persentase Laporan</h5>
-                            <h6 class="text-primary mt-3">{{ \Carbon\Carbon::now()->translatedFormat('F Y') }}</h6>
-                        </div>
+              <div class="col-md-6 mb-4">
+  <div class="card h-100 shadow-sm border-0">
+    <div class="card-header text-center border-0 bg-white">
+      <h5 class="mt-3 fw-semibold">Persentase Laporan</h5>
+      <h6 class="text-primary mt-1">{{ \Carbon\Carbon::now()->translatedFormat('F Y') }}</h6>
+    </div>
 
-                        <div class="card-body text-center position-relative">
-                            <div class="position-relative d-inline-block" style="width:200px; height:200px;">
-                                <canvas id="laporanChart" width="200" height="200"></canvas>
-                                <div id="laporanCenter"
-                                    class="position-absolute top-50 start-50 translate-middle text-center">
-                                    <div id="laporanLabel" class="fw-semibold text-secondary small">Hadir</div>
-                                    <div id="laporanValue" class="fw-bold fs-5 text-success">{{ $persenHadir ?? 0 }}%</div>
-                                </div>
-                            </div>
+    <div class="card-body text-center d-flex flex-column align-items-center justify-content-center" style="margin-top: -10px;">
+      <div class="chart-container position-relative" style="width:250px; height:250px; margin-top:-17px;">
+        <canvas id="laporanChart"></canvas>
+        <div id="laporanCenter"
+          class="position-absolute top-50 start-50 translate-middle text-center">
+          <div id="laporanLabel" class="fw-semibold text-secondary small">Hadir</div>
+          <div id="laporanValue" class="fw-bold fs-5 text-success">{{ $persenHadir ?? 0 }}%</div>
+        </div>
+      </div>
 
-                            <div class="mt-5">
-                                <ul class="list-unstyled d-inline-block text-start">
-                                    <li class="laporan-item mb-2" data-type="Hadir" data-value="{{ $persenHadir ?? 0 }}">
-                                        <span class="badge bg-success me-2">&nbsp;</span> Hadir
-                                    </li>
-                                    <li class="laporan-item mb-2" data-type="Dinas Luar" data-value="{{ $persenDL ?? 0 }}">
-                                        <span class="badge bg-primary me-2">&nbsp;</span> Dinas Luar
-                                    </li>
-                                    <li class="laporan-item mb-2" data-type="Cuti" data-value="{{ $persenCuti ?? 0 }}">
-                                        <span class="badge bg-warning me-2">&nbsp;</span> Cuti
-                                    </li>
-                                    <li class="laporan-item mb-2" data-type="Sakit" data-value="{{ $persenSakit ?? 0 }}">
-                                        <span class="badge bg-danger me-2">&nbsp;</span> Sakit
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div class="mt-4">
+        <ul class="list-unstyled d-inline-block text-start">
+  <li class="laporan-item mb-2" data-type="Hadir" data-value="{{ $persenHadir ?? 0 }}">
+    <span class="badge rounded-pill" style="background-color:#6EE7B7;">&nbsp;&nbsp;</span> Hadir
+  </li>
+  <li class="laporan-item mb-2" data-type="Dinas Luar" data-value="{{ $persenDL ?? 0 }}">
+    <span class="badge rounded-pill" style="background-color:#93C5FD;">&nbsp;&nbsp;</span> Dinas Luar
+  </li>
+  <li class="laporan-item mb-2" data-type="Cuti" data-value="{{ $persenCuti ?? 0 }}">
+    <span class="badge rounded-pill" style="background-color:#D1D5DB;">&nbsp;&nbsp;</span> Cuti
+  </li>
+  <li class="laporan-item mb-2" data-type="Sakit" data-value="{{ $persenSakit ?? 0 }}">
+    <span class="badge rounded-pill" style="background-color:#C4B5FD;">&nbsp;&nbsp;</span> Sakit
+  </li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
                 {{-- Persentase Pengisian Logbook --}}
-                <div class="col-md-6 mb-4">
-                    <div class="card h-100 shadow-sm border-0 ">
-                        <div class="card-body text-center mt-3">
-                            <h5 class="card-title mb-2 fw-semibold">Persentase Pengisian Logbook</h5>
-                            <h6 class="text-primary mb-2">
-                                Bulan {{ \Carbon\Carbon::now()->translatedFormat('F') }}
-                            </h6>
-                            <p class="text-muted mb-4">
-                                (Persentase update otomatis, realtime setiap bulan)
-                            </p>
+              <div class="col-md-6 mb-4">
+  <div class="card h-100 shadow-sm border-0">
+    <div class="card-body text-center mt-3">
+      <h5 class="card-title mb-2 fw-semibold">Persentase Pengisian Logbook</h5>
+      <h6 class="text-primary mb-2">
+        Bulan {{ \Carbon\Carbon::now()->translatedFormat('F') }}
+      </h6>
 
-                            {{-- Grafik donut dengan teks di tengah --}}
-                            <div class="position-relative d-inline-block" style="width:220px; height:220px;">
-                                <canvas id="logbookChart" width="220" height="220"></canvas>
+      {{-- Grafik donut dengan teks di tengah --}}
+      <div class="position-relative d-inline-block" style="width:240px; height:240px; margin-top:20px;">
+        <canvas id="logbookChart" width="240" height="240"></canvas>
 
-                                {{-- Teks tengah --}}
-                                <div id="chartCenterText"
-                                    class="position-absolute top-50 start-50 translate-middle text-center">
-                                    <h6 id="centerLabel" class="mb-1 fw-semibold text-success">Terisi</h6>
-                                    <span id="centerValue" class="fw-bold fs-4">{{ $persenIsi }}%</span>
-                                </div>
-                            </div>
+        {{-- 🖤 Teks tengah warna hitam --}}
+        <div id="chartCenterText"
+          class="position-absolute top-50 start-50 translate-middle text-center"
+          style="color:#000;">
+          <h6 id="centerLabel" class="mb-1 fw-semibold" style="color:#000;">Terisi</h6>
+          <span id="centerValue" class="fw-bold fs-4" style="color:#000;">{{ $persenIsi }}%</span>
+        </div>
+      </div>
 
-                            {{-- Tombol interaktif --}}
-                            <div class="d-flex justify-content-center mb-4 gap-3">
-                                <button id="btnTerisi" class="btn btn-sm rounded-pill px-3 py-1 active"
-                                    style="background-color:#00c38d; color:white; border:none;">
-                                    Terisi
-                                </button>
-                                <button id="btnTidakIsi" class="btn btn-sm rounded-pill px-3 py-1"
-                                    style="background-color:#f06595; color:white; border:none; opacity:0.7;">
-                                    Tidak Isi
-                                </button>
-                            </div>
+      {{-- Tombol interaktif --}}
+      <div class="d-flex justify-content-center mb-4 gap-3 mt-3">
+        <button id="btnTerisi" class="btn btn-sm rounded-pill px-3 py-1 active"
+          style="background-color:#A78BFA; color:white; border:none; opacity:1;">
+          Terisi
+        </button>
+        <button id="btnTidakIsi" class="btn btn-sm rounded-pill px-3 py-1"
+          style="background-color:#60A5FA; color:white; border:none; opacity:0.7;">
+          Tidak Isi
+        </button>
+      </div>
 
-                            {{-- Info detail --}}
-                            <ul class="list-unstyled mt-3 mb-2 small fw-semibold text-secondary">
-                                <li>
-                                    <span class="badge rounded-pill me-2" style="background-color:#00c38d;">&nbsp;</span>
-                                    {{ $totalIsi }} Logbook terisi
-                                </li>
-                                <li>
-                                    <span class="badge rounded-pill me-2" style="background-color:#f06595;">&nbsp;</span>
-                                    {{ $totalTidakIsi }} Logbook tidak terisi
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+      {{-- Info detail --}}
+      <ul class="list-unstyled mt-3 mb-2 small fw-semibold text-secondary">
+        <li>
+          <span class="badge rounded-pill me-2" style="background-color:#A78BFA;">&nbsp;</span>
+          {{ $totalIsi }} Logbook terisi
+        </li>
+        <li>
+          <span class="badge rounded-pill me-2" style="background-color:#60A5FA;">&nbsp;</span>
+          {{ $totalTidakIsi }} Logbook tidak terisi
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
             </div>
         </div>
 
@@ -302,66 +303,90 @@
 
 
 
+    <style>
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+          /* Warna teks di tengah chart */
+  #laporanCenter {
+    color: #000 !important; /* pastikan semua teks di dalamnya hitam */
+  }
 
+  #laporanLabel,
+  #laporanValue {
+    color: #000 !important; /* ubah label dan nilai jadi hitam */
+  }
+    </style>
 
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
         <script>
-            // === CHART LOGBOOK ===
-            const ctx = document.getElementById('logbookChart');
-            const chart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Isi', 'Tidak Isi'],
-                    datasets: [{
-                        data: [{{ $persenIsi }}, {{ $persenTidakIsi }}],
-                        backgroundColor: ['#00c38d', '#f06595'],
-                        borderWidth: 1,
-                        cutout: '78%',
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            enabled: true
-                        }
-                    },
-                    responsive: false,
-                    animation: {
-                        animateRotate: true,
-                        animateScale: true
-                    }
-                }
-            });
+           // === CHART LOGBOOK ===
+const ctx = document.getElementById('logbookChart');
+const chart = new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Terisi', 'Tidak Isi'],
+    datasets: [{
+      data: [{{ $persenIsi }}, {{ $persenTidakIsi }}],
+      backgroundColor: ['#A78BFA', '#60A5FA'], // ungu & biru lembut
+      borderWidth: 2,
+      borderColor: '#fff',
+      cutout: '75%',
+    }]
+  },
+  options: {
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        enabled: true,
+        backgroundColor: '#1F2937',
+        titleColor: '#fff',
+        bodyColor: '#E5E7EB',
+        displayColors: false,
+        padding: 10,
+        cornerRadius: 8,
+        callbacks: {
+          label: (context) => `${context.label}: ${context.formattedValue || 0}%`
+        }
+      }
+    },
+    responsive: false,
+    animation: { animateRotate: true, animateScale: true }
+  }
+});
 
-            const labelEl = document.getElementById('centerLabel');
-            const valueEl = document.getElementById('centerValue');
-            const btnTerisi = document.getElementById('btnTerisi');
-            const btnTidakIsi = document.getElementById('btnTidakIsi');
+// === Teks tengah chart ===
+const labelEl = document.getElementById('centerLabel');
+const valueEl = document.getElementById('centerValue');
+const btnTerisi = document.getElementById('btnTerisi');
+const btnTidakIsi = document.getElementById('btnTidakIsi');
 
-            btnTerisi.addEventListener('click', () => {
-                btnTerisi.style.opacity = '1';
-                btnTidakIsi.style.opacity = '0.7';
-                labelEl.textContent = 'Terisi';
-                labelEl.classList.remove('text-danger');
-                labelEl.classList.add('text-success');
-                valueEl.textContent = '{{ $persenIsi }}%';
-            });
+// Tombol Terisi
+btnTerisi.addEventListener('click', () => {
+  btnTerisi.style.opacity = '1';
+  btnTidakIsi.style.opacity = '0.7';
+  labelEl.textContent = 'Terisi';
+  valueEl.textContent = '{{ $persenIsi }}%';
+  // warna hitam selalu
+  labelEl.style.color = '#000';
+  valueEl.style.color = '#000';
+});
 
-            btnTidakIsi.addEventListener('click', () => {
-                btnTidakIsi.style.opacity = '1';
-                btnTerisi.style.opacity = '0.7';
-                labelEl.textContent = 'Tidak Isi';
-                labelEl.classList.remove('text-success');
-                labelEl.classList.add('text-danger');
-                valueEl.textContent = '{{ $persenTidakIsi }}%';
-            });
-
+// Tombol Tidak Isi
+btnTidakIsi.addEventListener('click', () => {
+  btnTidakIsi.style.opacity = '1';
+  btnTerisi.style.opacity = '0.7';
+  labelEl.textContent = 'Tidak Isi';
+  valueEl.textContent = '{{ $persenTidakIsi }}%';
+  // warna hitam selalu
+  labelEl.style.color = '#000';
+  valueEl.style.color = '#000';
+});
 
             // === CHART PEGAWAI UNRI ===
             var jumlahPNS = {{ $jumlahPNS ?? 0 }};
@@ -481,60 +506,60 @@
             });
 
 
-            // === CHART PERSENTASE LAPORAN (PER BULAN) ===
-            const laporanCtx = document.getElementById('laporanChart');
+           // === CHART PERSENTASE LAPORAN (PER BULAN) ===
+const laporanCtx = document.getElementById('laporanChart');
 
-            const laporanChart = new Chart(laporanCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Hadir', 'Dinas Luar', 'Cuti', 'Sakit'],
-                    datasets: [{
-                        data: [
-                            {{ $persenHadir ?? 0 }},
-                            {{ $persenDL ?? 0 }},
-                            {{ $persenCuti ?? 0 }},
-                            {{ $persenSakit ?? 0 }}
-                        ],
-                        backgroundColor: ['#10B981', '#3B82F6', '#FACC15', '#EF4444'],
-                        borderColor: '#fff',
-                        borderWidth: 1, // ✅ lebih tebal
-                        hoverBorderWidth: 7, // tebal saat di-hover
-                        cutout: '78%',
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            enabled: true,
-                            backgroundColor: '#111827',
-                            titleColor: '#fff',
-                            bodyColor: '#e5e7eb',
-                            displayColors: false,
-                            padding: 10,
-                            cornerRadius: 8,
-                            callbacks: {
-                                label: function(context) {
-                                    const label = context.label || '';
-                                    const value = context.formattedValue || 0;
-                                    return `${label}: ${value}%`;
-                                }
-                            }
-                        },
-                    },
-                    hover: {
-                        mode: 'nearest',
-                        intersect: true,
-                    },
-                    animation: {
-                        animateRotate: true,
-                        animateScale: true,
-                    },
-                    responsive: false,
-                }
-            });
+const dataValues = [
+  {{ $persenHadir ?? 0 }},
+  {{ $persenDL ?? 0 }},
+  {{ $persenCuti ?? 0 }},
+  {{ $persenSakit ?? 0 }}
+];
+
+const total = dataValues.reduce((a, b) => a + b, 0);
+
+// 🎨 Warna Sneat soft (merah & kuning diganti abu & ungu)
+const softColors = ['#6EE7B7', '#93C5FD', '#D1D5DB', '#C4B5FD']; 
+// Hijau, Biru, Abu, Ungu lembut
+
+const chartData = total === 0 ? [1] : dataValues;
+const chartColors = total === 0 ? ['#E5E7EB'] : softColors;
+
+const laporanChart = new Chart(laporanCtx, {
+  type: 'doughnut',
+  data: {
+    labels: total === 0 ? ['Tidak ada data'] : ['Hadir', 'Dinas Luar', 'Cuti', 'Sakit'],
+    datasets: [{
+      data: chartData,
+      backgroundColor: chartColors,
+      borderColor: '#fff',
+      borderWidth: 2,
+      hoverBorderWidth: 6,
+      cutout: '72%'
+    }]
+  },
+  options: {
+    maintainAspectRatio: false,
+    layout: { padding: 10 },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        enabled: total !== 0,
+        backgroundColor: '#1F2937',
+        titleColor: '#fff',
+        bodyColor: '#E5E7EB',
+        displayColors: false,
+        padding: 10,
+        cornerRadius: 8,
+        callbacks: {
+          label: (context) => `${context.label}: ${context.formattedValue || 0}%`
+        }
+      }
+    },
+    animation: { animateRotate: true, animateScale: true },
+    responsive: true
+  }
+});
 
             // === INTERAKSI DINAMIS ===
             const laporanItems = document.querySelectorAll('.laporan-item');

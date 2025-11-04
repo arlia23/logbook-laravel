@@ -47,6 +47,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(RekapKehadiran::class);
     }
+     public function izinsaathadir()
+    {
+        return $this->hasMany(\App\Models\Izinsaathadir::class, 'user_id');
+    }
 
 
     /**

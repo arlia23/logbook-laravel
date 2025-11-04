@@ -13,7 +13,6 @@ class UserSakitController extends Controller
 {
     public function index()
     {
-        // ✅ Ambil hanya data sakit milik user login
         $sakit = Sakit::where('user_id', Auth::id())->get();
         return view('user.sakit.index', compact('sakit'));
     }
@@ -37,19 +36,26 @@ class UserSakitController extends Controller
         $start = Carbon::parse($request->tgl_mulai);
         $end   = Carbon::parse($request->tgl_selesai);
 
-        // ✅ Cek overlap dengan DetailKehadiran
-        $exists = DetailKehadiran::where('user_id', Auth::id())
-            ->whereBetween('tanggal', [$start->format('Y-m-d'), $end->format('Y-m-d')])
-            ->exists();
+        // ✅ Cek tabrakan data presensi (biarkan kalau status 'A')
+        for ($date = $start->copy(); $date->lte($end); $date->addDay()) {
+            $detail = DetailKehadiran::where('user_id', Auth::id())
+                ->where('tanggal', $date->format('Y-m-d'))
+                ->first();
 
-        if ($exists) {
-            return back()->with('error', 'Sudah ada data kehadiran di tanggal tersebut, tidak bisa input sakit.');
+            // 🚫 Kalau sudah ada status selain A, tolak
+            if ($detail && in_array($detail->status, ['H', 'C', 'DL', 'S'])) {
+                return back()->withErrors([
+                    'tgl_mulai' => "Tanggal {$date->format('d-m-Y')} sudah memiliki status lain ({$detail->status})."
+                ]);
+            }
         }
 
+        // ✅ Simpan data sakit
         $data = $request->all();
         $data['user_id'] = Auth::id();
         $sakit = Sakit::create($data);
 
+        // ✅ Simpan ke detail kehadiran
         $this->saveDetailKehadiran($request->tgl_mulai, $request->tgl_selesai, 'S', $request->keterangan);
 
         return redirect()->route('user.sakit.index')->with('success', 'Data sakit berhasil ditambahkan');
@@ -82,6 +88,23 @@ class UserSakitController extends Controller
         // Hapus detail lama
         $this->deleteDetailKehadiran($sakit->tgl_mulai, $sakit->tgl_selesai, 'S');
 
+        // 🚨 Cek lagi tabrakan untuk rentang baru
+        $start = Carbon::parse($sakit->tgl_mulai);
+        $end   = Carbon::parse($request->tgl_selesai);
+
+        for ($date = $start->copy(); $date->lte($end); $date->addDay()) {
+            $detail = DetailKehadiran::where('user_id', Auth::id())
+                ->where('tanggal', $date->format('Y-m-d'))
+                ->first();
+
+            if ($detail && in_array($detail->status, ['H', 'C', 'DL', 'S'])) {
+                return back()->withErrors([
+                    'tgl_mulai' => "Tanggal {$date->format('d-m-Y')} sudah memiliki status lain ({$detail->status})."
+                ]);
+            }
+        }
+
+        // ✅ Update data utama
         $sakit->update([
             'nama_pegawai'        => $request->nama_pegawai,
             'keterangan'          => $request->keterangan,
@@ -90,7 +113,7 @@ class UserSakitController extends Controller
             'tgl_surat_ket_sakit' => $request->tgl_surat_ket_sakit,
         ]);
 
-        // Simpan detail baru
+        // ✅ Simpan ulang detail
         $this->saveDetailKehadiran($sakit->tgl_mulai, $request->tgl_selesai, 'S', $request->keterangan);
 
         return redirect()->route('user.sakit.index')->with('success', 'Data sakit berhasil diperbarui');
@@ -107,25 +130,23 @@ class UserSakitController extends Controller
     }
 
     private function saveDetailKehadiran($tglMulai, $tglSelesai, $status, $keterangan)
-{
-    $start = Carbon::parse($tglMulai);
-    $end = Carbon::parse($tglSelesai);
+    {
+        $start = Carbon::parse($tglMulai);
+        $end = Carbon::parse($tglSelesai);
 
-    for ($date = $start->copy(); $date->lte($end); $date->addDay()) {
-        DetailKehadiran::updateOrCreate(
-            [
-                'user_id' => Auth::id(),
-                'tanggal' => $date->format('Y-m-d'),
-            ],
-            [
-                'status'   => $status,
-                // 👉 khusus sakit (S) jangan isi kegiatan
-                'kegiatan' => $status === 'S' ? null : ($keterangan ?? null),
-            ]
-        );
+        for ($date = $start->copy(); $date->lte($end); $date->addDay()) {
+            DetailKehadiran::updateOrCreate(
+                [
+                    'user_id' => Auth::id(),
+                    'tanggal' => $date->format('Y-m-d'),
+                ],
+                [
+                    'status'   => $status,
+                    'kegiatan' => $status === 'S' ? null : ($keterangan ?? null),
+                ]
+            );
+        }
     }
-}
-
 
     private function deleteDetailKehadiran($tglMulai, $tglSelesai, $status)
     {
