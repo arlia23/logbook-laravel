@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminIzinsaathadirController;
 use App\Http\Controllers\Admin\BaseController;
 use App\Http\Controllers\Admin\CutiController;
 use App\Http\Controllers\Admin\DinasLuarController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\ExcelController;
 
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\User\UserIzinsaathadirController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -82,29 +84,25 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
         Route::get('/rekap/export', 'export')->name('admin.rekap.export');
     });
 
-    Route::controller(DinasLuarController::class)->group(function () {
-        Route::get('/dinas-luar', 'index')->name('admin.dinas.index');
-        Route::get('/dinas-luar/{id}', 'show')->name('admin.dinas.show');
-        Route::put('/dinas-luar/{id}/approve', 'approve')->name('admin.dinas.approve');
-        Route::put('/dinas-luar/{id}/reject', 'reject')->name('admin.dinas.reject');
-        Route::delete('/dinas-luar/{id}', 'destroy')->name('admin.dinas.destroy');
+    // ✅ Route Dinas Luar Admin
+    Route::controller(DinasLuarController::class)->prefix('dinas-luar')->group(function () {
+        Route::get('/', 'index')->name('admin.dinas-luar.index');
+        Route::put('/{id}', 'update')->name('admin.dinas-luar.update');
+        Route::delete('/{id}', 'destroy')->name('admin.dinas-luar.destroy');
     });
 
-    // 🤒 SAKIT
+    // 📋 Data Sakit Pegawai
     Route::controller(SakitController::class)->group(function () {
-        Route::get('/sakit', 'index')->name('admin.sakit.index');
-        Route::get('/sakit/{id}', 'show')->name('admin.sakit.show');
-        Route::put('/sakit/{id}/approve', 'approve')->name('admin.sakit.approve');
-        Route::put('/sakit/{id}/reject', 'reject')->name('admin.sakit.reject');
-        Route::delete('/sakit/{id}', 'destroy')->name('admin.sakit.destroy');
+        Route::get('/sakit', 'index')->name('admin.sakit.index');       // Tampilkan daftar sakit
+        Route::put('/sakit/{id}', 'update')->name('admin.sakit.update'); // Update data sakit
+        Route::delete('/sakit/{id}', 'destroy')->name('admin.sakit.destroy'); // Hapus data sakit
     });
 
     // 🌴 CUTI
     Route::controller(CutiController::class)->group(function () {
         Route::get('/cuti', 'index')->name('admin.cuti.index');
-        Route::get('/cuti/{id}', 'show')->name('admin.cuti.show');
-        Route::put('/cuti/{id}/approve', 'approve')->name('admin.cuti.approve');
-        Route::put('/cuti/{id}/reject', 'reject')->name('admin.cuti.reject');
+        Route::get('/cuti/{id}/edit', 'edit')->name('admin.cuti.edit');
+        Route::put('/cuti/{id}', 'update')->name('admin.cuti.update');
         Route::delete('/cuti/{id}', 'destroy')->name('admin.cuti.destroy');
     });
 
@@ -112,6 +110,12 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
         Route::get('/monitoring', 'index')->name('admin.monitoring.index');
         Route::post('/monitoring/store', 'store')->name('admin.monitoring.store');
         Route::put('/monitoring/update', 'update')->name('admin.monitoring.update');
+    });
+
+    // 🆕 IZIN SAAT HADIR
+    Route::controller(AdminIzinsaathadirController::class)->group(function () {
+        Route::get('/izin-saat-hadir', 'index')->name('admin.izin.index');
+        Route::delete('/izin-saat-hadir/{id}', 'destroy')->name('admin.izin.destroy');
     });
 });
 
@@ -184,14 +188,16 @@ Route::prefix('user')->middleware(['auth', 'isUser'])->group(function () {
         Route::put('/cuti/{cuti}', 'update')->name('user.cuti.update');
         Route::delete('/cuti/{cuti}', 'destroy')->name('user.cuti.destroy');
 
-         // 🧾 Tambahkan di dalam grup ini
-    Route::get('/cuti/{id}/download', 'downloadSurat')->name('user.cuti.download');
+        // 🧾 Tambahkan di dalam grup ini
+        Route::get('/cuti/{id}/download', 'downloadSurat')->name('user.cuti.download');
     });
 
-    
+
     // 📊 MONITORING
     Route::controller(UserMonitoringController::class)->group(function () {
         Route::get('/monitoring', 'index')->name('user.monitoring.index');
+        // route untuk kirim laporan ke supervisor
+    Route::post('/monitoring/store', 'store')->name('user.monitoring.store');
     });
 
     // 📌 KEHADIRAN
@@ -199,17 +205,35 @@ Route::prefix('user')->middleware(['auth', 'isUser'])->group(function () {
         Route::get('/kehadiran', 'index')->name('user.kehadiran.index');
     });
 
-   // 📊 REKAP KEHADIRAN
+    // 📄 IZIN SAAT HADIR
+    Route::controller(UserIzinsaathadirController::class)->group(function () {
+        Route::get('/izinsaathadir', 'index')->name('user.izinsaathadir.index');
+        Route::get('/izinsaathadir/create', 'create')->name('user.izinsaathadir.create');
+        Route::post('/izinsaathadir', 'store')->name('user.izinsaathadir.store');
+
+        // 🧾 Cetak PDF surat izin saat hadir
+        Route::get('/izinsaathadir/{id}/pdf', 'cetakPdf')->name('user.izinsaathadir.pdf');
+
+        // 📊 Rekap izin per bulan (PASTIKAN DI ATAS /{id})
+        Route::get('/izinsaathadir/rekap', 'rekap')->name('user.izinsaathadir.rekap');
+
+        // 🚫 Letakkan yang pakai parameter {id} di paling bawah
+        Route::get('/izinsaathadir/{id}', 'show')->name('user.izinsaathadir.show');
+        Route::get('/izinsaathadir/{id}/edit', 'edit')->name('user.izinsaathadir.edit');
+        Route::put('/izinsaathadir/{id}', 'update')->name('user.izinsaathadir.update');
+        Route::delete('/izinsaathadir/{id}', 'destroy')->name('user.izinsaathadir.destroy');
+    });
 
 
-Route::controller(UserRekapController::class)->group(function () {
-    Route::get('/rekap', 'index')->name('user.rekap.index');
-});
 
-// Route export dipisah ke controller Excel
-Route::get('/user/rekap/export', [ExcelController::class, 'exportUsers'])
-    ->name('user.rekap.export');
+    // 📊 REKAP KEHADIRAN
+    Route::controller(UserRekapController::class)->group(function () {
+        Route::get('/rekap', 'index')->name('user.rekap.index');
+    });
 
+    // Route export dipisah ke controller Excel
+    Route::get('/user/rekap/export', [ExcelController::class, 'exportUsers'])
+        ->name('user.rekap.export');
 });
 
 

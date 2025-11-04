@@ -13,7 +13,7 @@
   /* === KOP SURAT: 2 LAPIS GARIS === */
   .kop-container {
     width: 100%;
-    border: 2px double #444; /* Lapis luar: double */
+    border: 1px double #444; /* Lapis luar: double */
     padding: 2px;
     box-sizing: border-box;
   }
@@ -86,7 +86,7 @@
     <tr>
       <!-- KIRI -->
       <td style="width: 30%; text-align: center;">
-        <img src="{{ public_path('template/img/icons/hadir.png') }}" class="logo"><br>
+        <img src="{{ public_path('template/img/layouts/logounri.png') }}" class="logo"><br>
         <div class="instansi">PERPUSTAKAAN<br>UNIVERSITAS RIAU</div>
         <div class="slogan">“The Best Solution In The Search”</div>
       </td>
@@ -117,7 +117,7 @@
           </tr>
           <tr>
             <td>Halaman</td>
-            <td>1 dari 2</td>
+            <td>1 dari 1</td>
           </tr>
         </table>
       </td>
@@ -140,15 +140,19 @@
 
 <div class="spasi small">
   Dengan ini mengajukan permohonan izin untuk tidak masuk bekerja / kantor selama 
-  {{ \Carbon\Carbon::parse($cuti->tgl_mulai)->diffInDays(\Carbon\Carbon::parse($cuti->tgl_selesai)) + 1 }} hari,
+  {{ \Carbon\Carbon::parse($cuti->tgl_mulai)->diffInDays(\Carbon\Carbon::parse($cuti->tgl_selesai)) + 1 }} hari 
   pada hari {{ \Carbon\Carbon::parse($cuti->tgl_mulai)->translatedFormat('l') }} s/d 
-  {{ \Carbon\Carbon::parse($cuti->tgl_selesai)->translatedFormat('l, d F Y') }},
+  {{ \Carbon\Carbon::parse($cuti->tgl_selesai)->translatedFormat('l') }} 
+  tanggal {{ \Carbon\Carbon::parse($cuti->tgl_mulai)->translatedFormat('d F Y') }} s/d 
+  {{ \Carbon\Carbon::parse($cuti->tgl_selesai)->translatedFormat('d F Y') }}, 
   dengan alasan {{ $cuti->keterangan ?? '...' }}.
 </div>
+
 
 <div class="spasi small">
   Demikian permohonan ini, atas perhatian Bapak/Ibu diucapkan terima kasih.
 </div>
+<br><br>
 
 <div class="spasi small">
   Pekanbaru, {{ $tglSurat }}

@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'PNS User',
-                'email' => 'pns@example.com',
+                'email' => 'pns@gmail.com',
                 'email_verified_at' => now(),
                 'password' => bcrypt('12345'),
                 'role' => 'user',
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'P3K User',
-                'email' => 'p3k@example.com',
+                'email' => 'p3k@gmail.com',
                 'email_verified_at' => now(),
                 'password' => bcrypt('12345'),
                 'role' => 'user',

@@ -8,6 +8,7 @@ use App\Models\Presensi;
 use App\Models\Logbook;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserPresensiController extends Controller
 {
@@ -29,65 +30,64 @@ class UserPresensiController extends Controller
     }
 
     public function masuk(Request $request)
-{
-    $request->validate([
-        'kegiatan' => 'required|in:WFO,WFH',
-    ]);
+    {
+        $request->validate([
+            'kegiatan' => 'required|in:WFO,WFH',
+        ]);
 
-    $user = Auth::user();
-    $today = now()->toDateString();
+        $user = Auth::user();
+        $today = now()->toDateString();
 
-    // Cek apakah sudah presensi hari ini
-    $sudah = \App\Models\Presensi::where('user_id', $user->id)
-        ->whereDate('tanggal', $today)
-        ->exists();
+        // Cek apakah sudah presensi hari ini
+        $sudah = Presensi::where('user_id', $user->id)
+            ->whereDate('tanggal', $today)
+            ->exists();
 
-    if ($sudah) {
-        return back()->with('error', 'Anda sudah presensi hari ini.');
-    }
+        if ($sudah) {
+            return back()->with('error', 'Anda sudah presensi hari ini.');
+        }
 
-    // Simpan presensi masuk
-    $presensi = \App\Models\Presensi::create([
-        'user_id' => $user->id,
-        'tanggal' => $today,
-        'jam_masuk' => now()->format('H:i:s'),
-        'status' => 'H',
-        'kegiatan' => $request->kegiatan,
-    ]);
-
-    // 🔹 Tambahkan otomatis ke detail_kehadirans
-    \DB::table('detail_kehadirans')->updateOrInsert(
-        [
+        // Simpan presensi masuk
+        $presensi = Presensi::create([
             'user_id' => $user->id,
             'tanggal' => $today,
-        ],
-        [
-            'status' => 'H',
-            'kegiatan' => $request->kegiatan,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]
-    );
-
-    // Buat logbook kosong untuk hari ini
-    \App\Models\Logbook::updateOrCreate(
-        ['user_id' => $user->id, 'tanggal' => $today],
-        [
-            'kegiatan' => $request->kegiatan,
-            'catatan_pekerjaan' => json_encode([]),
-            'status' => 'Belum',
             'jam_masuk' => now()->format('H:i:s'),
-        ]
-    );
+            'status_kehadiran' => 'Hadir',
+        ]);
 
-    return redirect()->back()->with('success', 'Presensi masuk berhasil direkam!');
-}
+        // Tambahkan otomatis ke detail_kehadirans
+        DB::table('detail_kehadirans')->updateOrInsert(
+            [
+                'user_id' => $user->id,
+                'tanggal' => $today,
+            ],
+            [
+                'status' => 'H',
+                'kegiatan' => $request->kegiatan,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
 
+        // Buat logbook kosong untuk hari ini (supaya sinkron dengan presensi)
+        Logbook::updateOrCreate(
+            ['user_id' => $user->id, 'tanggal' => $today],
+            [
+                'kegiatan' => $request->kegiatan,
+                'catatan_pekerjaan' => json_encode([]),
+                'status' => 'Belum',
+                'jam_masuk' => now()->format('H:i:s'),
+                'jam_pulang' => null,
+            ]
+        );
+
+        return redirect()->back()->with('success', 'Presensi masuk berhasil direkam!');
+    }
 
     public function pulang(Request $request)
     {
         $userId = Auth::id();
-        $today = Carbon::today();
+        $today = Carbon::today()->toDateString();
 
         // Validasi input logbook
         $request->validate([
@@ -106,25 +106,39 @@ class UserPresensiController extends Controller
             }
         }
 
-        // Update presensi: tambahkan jam pulang
+        // Update presensi: tambahkan jam_pulang
         $presensi = Presensi::where('user_id', $userId)
             ->whereDate('tanggal', $today)
             ->first();
 
         if ($presensi) {
-            $presensi->update(['jam_pulang' => now()->format('H:i:s')]);
+            $presensi->update([
+                'jam_pulang' => now()->format('H:i:s'),
+            ]);
         }
 
-        // Update logbook: simpan catatan & status
-        $logbook = Logbook::updateOrCreate(
-            ['user_id' => $userId, 'tanggal' => $today],
-            [
+        // Update logbook: simpan catatan & status dan jam_pulang
+        $logbook = Logbook::where('user_id', $userId)
+            ->whereDate('tanggal', $today)
+            ->first();
+
+        if ($logbook) {
+            $logbook->update([
+                'catatan_pekerjaan' => json_encode($catatan),
+                'jam_pulang' => now()->format('H:i:s'),
+                'status' => collect($catatan)->contains('status', 'Belum') ? 'Belum' : 'Selesai',
+            ]);
+        } else {
+            // Jika belum ada logbook, buat baru (backup)
+            Logbook::create([
+                'user_id' => $userId,
+                'tanggal' => $today,
                 'catatan_pekerjaan' => json_encode($catatan),
                 'jam_pulang' => now()->format('H:i:s'),
                 'status' => collect($catatan)->contains('status', 'Belum') ? 'Belum' : 'Selesai',
                 'kegiatan' => $presensi->kegiatan ?? 'WFO/WFH',
-            ]
-        );
+            ]);
+        }
 
         return redirect()->route('user.logbook.index')
             ->with('success', 'Presensi pulang dan logbook berhasil disimpan.');

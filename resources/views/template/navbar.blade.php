@@ -18,13 +18,6 @@
          <!-- /Search -->
 
          <ul class="navbar-nav flex-row align-items-center ms-md-auto">
-             <!-- Place this tag where you want the button to render. -->
-             <li class="nav-item lh-1 me-4">
-                 <a class="github-button"
-                     href="https://github.com/themeselection/sneat-bootstrap-html-admin-template-free"
-                     data-icon="octicon-star" data-size="large" data-show-count="true"
-                     aria-label="Star themeselection/sneat-html-admin-template-free on GitHub">Star</a>
-             </li>
 
              <!-- User -->
              <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -62,14 +55,6 @@
                          <a class="dropdown-item" href="{{ route('user.profile.index') }}">
                              <i class="icon-base bx bx-user icon-md me-3"></i><span>My Profile</span>
                          </a>
-                     </li>
-                     <li>
-                         <a class="dropdown-item" href="#">
-                             <i class="icon-base bx bx-cog icon-md me-3"></i><span>Settings</span>
-                         </a>
-                     </li>
-                     <li>
-                         <div class="dropdown-divider my-1"></div>
                      </li>
                      <li>
                          <a class="dropdown-item" href="{{ route('logout') }}"

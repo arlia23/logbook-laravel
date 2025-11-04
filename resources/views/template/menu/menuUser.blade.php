@@ -13,7 +13,7 @@
     </li>
     <li class="menu-item">
         <a href="{{ route('logbook.index') }}" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-book"></i>
+            <i class="fi fi-rr-book" style="margin-right: 12px;"></i>
             <div data-i18n="Logbook">Logbook</div>
         </a>
     </li>
@@ -21,7 +21,7 @@
 
     <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+            <i class="fi fi-rs-edit" style="margin-right: 12px;"></i>
             <div class="text-truncate">Tidak Hadir</div>
         </a>
         <ul class="menu-sub">
@@ -45,7 +45,7 @@
     </li>
     <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+           <i class="fi fi-rs-memo-pad" style="margin-right: 12px;"></i>
             <div class="text-truncate">Laporan</div>
         </a>
         <ul class="menu-sub">
@@ -64,8 +64,27 @@
         </ul>
     </li>
     <li class="menu-item">
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <i class="fi fi-rs-book-copy" style="margin-right: 12px;"></i>
+            <div class="text-truncate" >Izin Saat Hadir</div>
+        </a>
+        <ul class="menu-sub">
+            <li class="menu-item">
+                <a href="{{ route('user.izinsaathadir.index') }}" class="menu-link">
+                    <div class="text-truncate" data-i18n="Catatan">Izin Saat Hadir</div>
+                </a>
+            </li>
+
+            <li class="menu-item">
+                <a href="{{ route('user.izinsaathadir.rekap') }}" class="menu-link">
+                    <div>Rekapan</div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="menu-item">
         <a href="{{ route('user.help') }}" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-book"></i>
+            <i class="fi fi-rs-life-ring" style="margin-right: 12px;"></i>
             <div data-i18n="Help">Help</div>
         </a>
     </li>
@@ -73,7 +92,7 @@
     <li class="menu-item">
         <a href="{{ route('logout') }}" class="menu-link"
             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="menu-icon tf-icons bx bx-power-off"></i>
+            <i class="fi fi-rr-power" style="margin-right: 12px;"></i>
             <div>Log Out</div>
         </a>
 

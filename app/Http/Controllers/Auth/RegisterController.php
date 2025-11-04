@@ -28,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/user/home';
 
     /**
      * Create a new controller instance.
@@ -57,7 +57,7 @@ class RegisterController extends Controller
             'name'      => ['required', 'string', 'max:255'],
             'email'     => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password'  => ['required', 'string', 'min:5'],
-            'tipe_user' => ['nullable', 'in:pns,p3k,magang,cleaning'],
+            'tipe_user' => ['nullable', 'in:pns,p3k,phl'],
         ], $message);
     }
 

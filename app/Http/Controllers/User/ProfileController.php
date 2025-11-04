@@ -19,10 +19,9 @@ class ProfileController extends Controller
 
     public function edit()
     {
-        $user = Auth::user();
-        $unitFakultas = UnitFakultas::all(); // ✅ ambil data unit/fakultas
 
-        return view('user.profile.edit', compact('user', 'unitFakultas'));
+        $user = Auth::user();
+        return view('user.profile.edit', compact('user'));
     }
 
     public function update(Request $request)

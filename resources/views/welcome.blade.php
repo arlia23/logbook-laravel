@@ -370,68 +370,6 @@
             transform: translateY(-3px);
         }
 
-        /* Floating Elements */
-        .floating-shapes {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .shape {
-            position: absolute;
-            opacity: 0.1;
-            animation: float 15s infinite ease-in-out;
-            color: white;
-        }
-
-        .shape-1 {
-            top: 20%;
-            left: 10%;
-            font-size: 3rem;
-            animation-delay: 0s;
-        }
-
-        .shape-2 {
-            top: 60%;
-            left: 80%;
-            font-size: 2.5rem;
-            animation-delay: 5s;
-        }
-
-        .shape-3 {
-            top: 30%;
-            right: 20%;
-            font-size: 2rem;
-            animation-delay: 10s;
-        }
-
-        .shape-4 {
-            top: 70%;
-            left: 20%;
-            font-size: 2.2rem;
-            animation-delay: 3s;
-        }
-
-        .shape-5 {
-            top: 40%;
-            right: 10%;
-            font-size: 2.8rem;
-            animation-delay: 7s;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0px) rotate(0deg);
-            }
-
-            50% {
-                transform: translateY(-20px) rotate(180deg);
-            }
-        }
-
         /* Stats Section */
         .stats {
             background: white;
@@ -490,267 +428,6 @@
         .stat-label {
             color: var(--bs-gray-700);
             font-weight: 500;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 6rem 1.5rem;
-            background: #f8f9ff;
-        }
-
-        .features-container {
-            max-width: 1440px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .section-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            background: rgba(105, 108, 255, 0.1);
-            color: var(--bs-primary);
-            border-radius: 2rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--bs-dark);
-            margin-bottom: 1rem;
-            line-height: 1.3;
-        }
-
-        .section-description {
-            font-size: 1.125rem;
-            color: var(--bs-gray-700);
-            line-height: 1.7;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 20px rgba(67, 89, 113, 0.08);
-            transition: all 0.3s ease;
-            border: 1px solid var(--bs-gray-200);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(105, 108, 255, 0.05), transparent);
-            transition: left 0.7s;
-        }
-
-        .feature-card:hover::before {
-            left: 100%;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(67, 89, 113, 0.15);
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--bs-primary), #8b5cf6);
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.25rem;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover .feature-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .feature-card h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--bs-dark);
-            margin-bottom: 1rem;
-        }
-
-        .feature-card p {
-            color: var(--bs-gray-700);
-            line-height: 1.6;
-        }
-
-        /* CTA Section */
-        .cta {
-            background: linear-gradient(135deg, var(--bs-dark) 0%, #435971 100%);
-            padding: 4rem 1.5rem;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .cta-container {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        .cta h2 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            line-height: 1.3;
-        }
-
-        .cta p {
-            font-size: 1.125rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-            line-height: 1.7;
-        }
-
-        /* Footer */
-        .footer {
-            background: white;
-            padding: 3rem 1.5rem 1rem;
-            border-top: 1px solid var(--bs-gray-200);
-        }
-
-        .footer-container {
-            max-width: 1440px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .footer-section h4 {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--bs-dark);
-            margin-bottom: 1rem;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 0.5rem;
-            transition: transform 0.2s ease;
-        }
-
-        .footer-section ul li:hover {
-            transform: translateX(5px);
-        }
-
-        .footer-section ul li a {
-            color: var(--bs-gray-700);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        .footer-section ul li a::before {
-            content: '→';
-            margin-right: 0.5rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .footer-section ul li a:hover::before {
-            opacity: 1;
-        }
-
-        .footer-section ul li a:hover {
-            color: var(--bs-primary);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            margin-top: 2rem;
-            border-top: 1px solid var(--bs-gray-200);
-            color: var(--bs-gray-700);
-        }
-
-        /* Scroll to top button */
-        .scroll-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 50px;
-            height: 50px;
-            background: var(--bs-primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(105, 108, 255, 0.3);
-        }
-
-        .scroll-to-top.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .scroll-to-top:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(105, 108, 255, 0.4);
         }
 
         /* Responsive Design */
@@ -843,9 +520,8 @@
 
             <ul class="navbar-nav">
                 <li><a href="#home">Beranda</a></li>
-                <li><a href="#features">Fitur</a></li>
-                <li><a href="#about">Tentang</a></li>
-                <li><a href="#contact">Kontak</a></li>
+                <li><a href="#Statistics ">Statistics </a></li>
+                <li><a href="#footer">Footer</a></li>
             </ul>
 
             <!-- Auth buttons sesuai format Laravel Anda -->
@@ -894,7 +570,7 @@
     </section>
 
     <!-- Statistics -->
-   <div class="stats">
+   <div class="stats" id="Statistics">
     <div class="stats-grid">
         <div class="stat-item">
             <div class="stat-icon">
@@ -922,143 +598,14 @@
     </div>
 </div>
 
-
-    <!-- Features -->
-    <section class="features" id="features">
-        <div class="features-container">
-            <div class="section-header">
-                <div class="section-badge">
-                    <i class="ti ti-star"></i>
-                    Fitur Utama
-                </div>
-                <h2 class="section-title">Solusi Lengkap untuk Manajemen Kehadiran</h2>
-                <p class="section-description">
-                    Dapatkan kontrol penuh atas absensi dan kegiatan tim dengan fitur-fitur canggih yang mudah
-                    digunakan.
-                </p>
-            </div>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="ti ti-fingerprint"></i>
-                    </div>
-                    <h3>Absensi Digital</h3>
-                    <p>Catat kehadiran dengan mudah menggunakan sistem clock-in/out digital. Terintegrasi dengan GPS
-                        untuk validasi lokasi kerja.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="ti ti-notebook"></i>
-                    </div>
-                    <h3>Pencatatan Kegiatan</h3>
-                    <p>Dokumentasikan semua aktivitas harian dengan detail. Kategori kegiatan yang dapat disesuaikan
-                        sesuai kebutuhan organisasi.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="ti ti-chart-bar"></i>
-                    </div>
-                    <h3>Laporan Real-time</h3>
-                    <p>Dashboard analitik memberikan insight mendalam tentang produktivitas dan kehadiran tim dalam
-                        bentuk grafik yang mudah dipahami.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="ti ti-calendar-time"></i>
-                    </div>
-                    <h3>Manajemen Jadwal</h3>
-                    <p>Atur jadwal kerja fleksibel, shift karyawan, dan jadwal kegiatan dengan kalender terintegrasi
-                        yang user-friendly.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="ti ti-bell"></i>
-                    </div>
-                    <h3>Notifikasi Cerdas</h3>
-                    <p>Dapatkan pengingat otomatis untuk absensi, deadline kegiatan, dan notifikasi penting lainnya
-                        melalui email atau push notification.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="ti ti-shield-lock"></i>
-                    </div>
-                    <h3>Keamanan Data</h3>
-                    <p>Sistem keamanan berlapis melindungi data sensitif dengan enkripsi tingkat enterprise dan backup
-                        otomatis setiap hari.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="cta">
-        <div class="cta-container">
-            <h2>Mulai Kelola Absensi & Kegiatan Hari Ini</h2>
-            <p>Bergabunglah dengan ribuan perusahaan yang telah merasakan kemudahan sistem logbook digital kami</p>
-            <div class="hero-buttons">
-                <a href="{{ route('register') }}" class="btn btn-white">
-                    <i class="ti ti-rocket"></i>
-                    Daftar Sekarang
-                </a>
-                <a href="#contact" class="btn btn-outline-white">
-                    <i class="ti ti-phone"></i>
-                    Hubungi Kami
-                </a>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-section">
-                <h4>LogBook Pro</h4>
-                <p>Solusi terdepan untuk manajemen absensi dan pencatatan kegiatan harian yang efisien dan mudah
-                    digunakan.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Fitur</h4>
-                <ul>
-                    <li><a href="#">Absensi Digital</a></li>
-                    <li><a href="#">Pencatatan Kegiatan</a></li>
-                    <li><a href="#">Laporan & Analytics</a></li>
-                    <li><a href="#">Manajemen Jadwal</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Dukungan</h4>
-                <ul>
-                    <li><a href="#">Panduan Penggunaan</a></li>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Support Center</a></li>
-                    <li><a href="#">Live Chat</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Perusahaan</h4>
-                <ul>
-                    <li><a href="#">Tentang Kami</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Karir</a></li>
-                    <li><a href="#">Kontak</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 LogBook Pro. Semua hak dilindungi undang-undang.</p>
-        </div>
-    </footer>
-
-    <!-- Scroll to top button -->
-    <div class="scroll-to-top" id="scrollToTop">
-        <i class="ti ti-arrow-up"></i>
+   
+   <footer id="footer" style="text-align: center; margin-top: 30px; margin-bottom: 20px; padding-top: 10px; padding-bottom: 10px;">
+    <div>
+        <p>&copy; 2025 LogBook UPT Perpustakaan UNRI</p>
     </div>
+</footer>
+
 
     <script>
         // Navbar scroll effect
@@ -1091,14 +638,6 @@
                         block: 'start'
                     });
                 }
-            });
-        });
-
-        // Scroll to top functionality
-        document.getElementById('scrollToTop').addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
             });
         });
 

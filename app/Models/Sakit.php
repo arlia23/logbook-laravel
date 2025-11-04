@@ -25,4 +25,8 @@ class Sakit extends Model
         'no_surat_ket_sakit',
         'tgl_surat_ket_sakit',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
